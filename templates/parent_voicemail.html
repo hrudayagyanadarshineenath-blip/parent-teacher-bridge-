@@ -1,0 +1,2433 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Voice Messages | Parent Teacher Bridge</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+
+    <style>
+        /* =========================================================
+           PARENT VOICE MESSAGE
+           LEFT SIDE = TEACHERS
+           RIGHT SIDE = SELECTED CHAT
+           ========================================================= */
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #faf7f1;
+            color: #4b3220;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+        /* =========================================================
+           MAIN VOICE APP
+           ========================================================= */
+
+        .voice-app {
+            min-height: 100vh;
+            display: flex;
+            background: #faf7f1;
+        }
+
+
+        /* =========================================================
+           LEFT SIDEBAR
+           ========================================================= */
+
+        .chat-sidebar {
+            width: 350px;
+            min-width: 350px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #fffdf9;
+            border-right: 1px solid #eadfce;
+        }
+
+
+        .chat-sidebar-header {
+            min-height: 78px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fffdf9;
+            border-bottom: 1px solid #eadfce;
+        }
+
+
+        .chat-sidebar-header h2 {
+            margin: 0 0 4px;
+            color: #3b2416;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+
+        .chat-sidebar-header p {
+            margin: 0;
+            color: #8b7867;
+            font-size: 12px;
+        }
+
+
+        .mobile-close-chat {
+            display: none;
+            border: none;
+            background: transparent;
+            color: #5a3a22;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+
+        /* =========================================================
+           SEARCH
+           ========================================================= */
+
+        .chat-search {
+            padding: 14px 18px;
+            border-bottom: 1px solid #eadfce;
+        }
+
+
+        .chat-search input {
+            width: 100%;
+            height: 48px;
+            border: 1px solid #e7dccd;
+            border-radius: 12px;
+            padding: 0 14px;
+            outline: none;
+            background: #faf7f1;
+            color: #4b3220;
+            font-size: 14px;
+        }
+
+
+        .chat-search input:focus {
+            border-color: #c29535;
+            box-shadow:
+                0 0 0 3px rgba(212, 160, 23, 0.10);
+        }
+
+
+        /* =========================================================
+           TEACHER LIST
+           ========================================================= */
+
+        .conversation-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+
+        .conversation {
+            width: 100%;
+            min-height: 96px;
+            padding: 15px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: none;
+            border-bottom: 1px solid #eee4d7;
+            background: #fffdf9;
+            text-align: left;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+
+        .conversation:hover {
+            background: #fff8e8;
+        }
+
+
+        .conversation.active {
+            background: #fff4dc;
+            box-shadow: inset 4px 0 0 #c38d24;
+        }
+
+
+        .conversation-avatar {
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: linear-gradient(135deg,
+                    #b7791f,
+                    #d4a017);
+            color: #fffaf0;
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+
+        .conversation-info {
+            min-width: 0;
+            flex: 1;
+        }
+
+
+        .conversation-info strong {
+            display: block;
+            margin-bottom: 4px;
+            color: #3b2416;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+
+        .conversation-info span {
+            display: block;
+            margin-bottom: 4px;
+            color: #977e66;
+            font-size: 11px;
+        }
+
+
+        .conversation-info small {
+            display: block;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            color: #8a7867;
+            font-size: 11px;
+        }
+
+
+        .conversation time {
+            flex-shrink: 0;
+            color: #9b8977;
+            font-size: 10px;
+        }
+
+
+        /* =========================================================
+           RIGHT CHAT AREA
+           ========================================================= */
+
+        .chat-main {
+            min-width: 0;
+            flex: 1;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #fffdf9;
+        }
+
+
+        /* =========================================================
+           CHAT HEADER
+           ========================================================= */
+
+        .chat-header {
+            min-height: 74px;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #fffdf9;
+            border-bottom: 1px solid #eadfce;
+        }
+
+
+        .mobile-chat-menu {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 10px;
+            background: #f3e8d7;
+            color: #5a3a22;
+            cursor: pointer;
+            font-size: 19px;
+        }
+
+
+        .chat-user-avatar {
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: linear-gradient(135deg,
+                    #b7791f,
+                    #d4a017);
+            color: #fffaf0;
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+
+        .chat-user-info {
+            min-width: 0;
+        }
+
+
+        .chat-user-info h2 {
+            margin: 0 0 4px;
+            color: #3b2416;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+
+        .chat-user-info span {
+            color: #7f6a57;
+            font-size: 11px;
+        }
+
+
+        .chat-header-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 8px;
+        }
+
+
+        .chat-header-actions button {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 10px;
+            background: #f3e8d7;
+            color: #6d5137;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+
+        .chat-header-actions button:hover {
+            background: #ead9c1;
+        }
+
+
+        /* =========================================================
+           MESSAGES AREA
+           ========================================================= */
+
+        .messages-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 28px 30px;
+            background:
+                radial-gradient(circle at top left,
+                    rgba(212, 160, 23, 0.06),
+                    transparent 28%),
+                #f9f2e8;
+        }
+
+
+        .chat-date {
+            width: max-content;
+            margin: 0 auto 30px;
+            padding: 7px 13px;
+            border-radius: 999px;
+            background: #eadfcf;
+            color: #7b6754;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+
+        .message-row {
+            display: flex;
+            margin-bottom: 16px;
+        }
+
+
+        .message-row.sent {
+            justify-content: flex-end;
+        }
+
+
+        .message-row.received {
+            justify-content: flex-start;
+        }
+
+
+        .message-bubble {
+            max-width: min(72%, 520px);
+            padding: 13px 16px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(73, 47, 26, 0.06);
+        }
+
+
+        .message-bubble p {
+            margin: 0;
+            line-height: 1.55;
+            font-size: 13px;
+        }
+
+
+        .sent .message-bubble {
+            background: linear-gradient(135deg,
+                    #a66a2c,
+                    #d4a017);
+            color: #fffaf0;
+            border-bottom-right-radius: 5px;
+        }
+
+
+        .received .message-bubble {
+            background: #fffdf9;
+            color: #584332;
+            border-bottom-left-radius: 5px;
+        }
+
+
+        .message-time {
+            display: block;
+            margin-top: 6px;
+            font-size: 9px;
+            opacity: 0.70;
+        }
+
+
+        .sent .message-time {
+            text-align: right;
+        }
+
+
+        /* =========================================================
+           VOICE MESSAGE
+           ========================================================= */
+
+        .voice-message-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        .voice-message {
+            max-width: 350px;
+            min-width: 230px;
+            padding: 11px 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(73, 47, 26, 0.06);
+        }
+
+
+        .received .voice-message {
+            background: #fffdf9;
+            border-bottom-left-radius: 5px;
+        }
+
+
+        .sent .voice-message {
+            background: linear-gradient(135deg,
+                    #a66a2c,
+                    #d4a017);
+            color: #fffaf0;
+            border-bottom-right-radius: 5px;
+        }
+
+
+        .play-voice {
+            width: 37px;
+            height: 37px;
+            flex-shrink: 0;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.90);
+            color: #6b4428;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+
+        .voice-wave {
+            flex: 1;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+
+        .voice-wave span {
+            width: 3px;
+            height: 9px;
+            border-radius: 10px;
+            background: currentColor;
+            opacity: 0.70;
+        }
+
+
+        .voice-wave span:nth-child(2),
+        .voice-wave span:nth-child(7) {
+            height: 15px;
+        }
+
+
+        .voice-wave span:nth-child(3),
+        .voice-wave span:nth-child(6) {
+            height: 20px;
+        }
+
+
+        .voice-wave span:nth-child(4),
+        .voice-wave span:nth-child(5) {
+            height: 12px;
+        }
+
+
+        .voice-duration {
+            flex-shrink: 0;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+
+        /* =========================================================
+           RECORDING PANEL
+           ========================================================= */
+
+        .recording-panel {
+            display: none;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 18px;
+            background: #fff3cf;
+            border-top: 1px solid #ead7aa;
+            border-bottom: 1px solid #ead7aa;
+        }
+
+
+        .recording-panel.active {
+            display: flex;
+        }
+
+
+        .recording-animation {
+            font-size: 13px;
+            animation: pulse 1s infinite;
+        }
+
+
+        .recording-panel span {
+            color: #6f3a2c;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+
+        #recordingTimer {
+            margin-left: auto;
+            color: #5a3a22;
+            font-weight: 800;
+        }
+
+
+        .recording-panel button {
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            background: #8f3f27;
+            color: white;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+
+        /* =========================================================
+           INPUT AREA
+           ========================================================= */
+
+        .chat-input-area {
+            min-height: 76px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #fffdf9;
+            border-top: 1px solid #eadfce;
+        }
+
+
+        .input-action,
+        .voice-record-button,
+        .send-message-button {
+            width: 44px;
+            height: 44px;
+            flex-shrink: 0;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+
+        .input-action {
+            background: #f3e8d7;
+            color: #6b5139;
+        }
+
+
+        .voice-record-button {
+            background: #fff1cd;
+            color: #7b5614;
+        }
+
+
+        .send-message-button {
+            background: linear-gradient(135deg,
+                    #a66a2c,
+                    #d4a017);
+            color: #fffaf0;
+        }
+
+
+        .input-action:hover,
+        .voice-record-button:hover,
+        .send-message-button:hover {
+            transform: translateY(-1px);
+        }
+
+
+        .chat-input-area input {
+            flex: 1;
+            min-width: 0;
+            height: 46px;
+            border: 1px solid #dbcdbb;
+            border-radius: 14px;
+            padding: 0 15px;
+            outline: none;
+            background: #fffdf9;
+            color: #4b3220;
+            font-size: 13px;
+        }
+
+
+        .chat-input-area input:focus {
+            border-color: #c29535;
+            box-shadow:
+                0 0 0 3px rgba(212, 160, 23, 0.10);
+        }
+
+
+        /* =========================================================
+           EMPTY / NO TEACHER
+           ========================================================= */
+
+        .no-teacher-box {
+            margin: auto;
+            max-width: 480px;
+            padding: 35px;
+            text-align: center;
+            background: #fffaf0;
+            border: 1px solid #eadfce;
+            border-radius: 18px;
+        }
+
+
+        .no-teacher-box .icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+
+        .no-teacher-box h2 {
+            margin: 0 0 8px;
+            color: #3b2416;
+            font-size: 21px;
+        }
+
+
+        .no-teacher-box p {
+            margin: 0;
+            color: #7b6754;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+
+        /* =========================================================
+           ANIMATION
+           ========================================================= */
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.35;
+            }
+
+        }
+
+
+        /* =========================================================
+           MOBILE SIDEBAR
+           ========================================================= */
+
+        @media (max-width: 800px) {
+
+            .chat-sidebar {
+                position: fixed;
+                z-index: 1000;
+                left: 0;
+                top: 0;
+                height: 100vh;
+                transform: translateX(-100%);
+                transition: transform 0.25s ease;
+                box-shadow: 10px 0 30px rgba(0, 0, 0, 0.12);
+            }
+
+
+            .chat-sidebar.active {
+                transform: translateX(0);
+            }
+
+
+            .mobile-close-chat {
+                display: block;
+            }
+
+
+            .mobile-chat-menu {
+                display: block;
+            }
+
+
+            .chat-main {
+                width: 100%;
+            }
+
+
+            .messages-area {
+                padding: 22px 15px;
+            }
+
+
+            .message-bubble {
+                max-width: 84%;
+            }
+
+
+            .chat-input-area {
+                padding: 10px;
+            }
+
+        }
+
+
+        @media (max-width: 550px) {
+
+            .chat-sidebar {
+                width: 88%;
+                min-width: 0;
+            }
+
+
+            .chat-header {
+                padding: 12px;
+            }
+
+
+            .chat-user-avatar {
+                width: 42px;
+                height: 42px;
+            }
+
+
+            .chat-user-info h2 {
+                font-size: 15px;
+            }
+
+
+            .chat-header-actions {
+                gap: 5px;
+            }
+
+
+            .chat-header-actions button {
+                width: 36px;
+                height: 36px;
+            }
+
+
+            .chat-input-area input {
+                font-size: 12px;
+            }
+
+
+            .input-action,
+            .voice-record-button,
+            .send-message-button {
+                width: 40px;
+                height: 40px;
+            }
+
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================================
+         MAIN VOICE MESSAGE APPLICATION
+         ========================================================= -->
+
+    <div class="voice-app">
+
+
+        <!-- =====================================================
+             LEFT SIDE
+             PARENT TEACHER LIST
+             ===================================================== -->
+
+        <aside class="chat-sidebar" id="chatSidebar">
+
+
+            <div class="chat-sidebar-header">
+
+                <div>
+
+                    <h2>
+                        💬 Messages
+                    </h2>
+
+                    <p>
+                        Parent Teacher Bridge
+                    </p>
+
+                </div>
+
+
+                <button class="mobile-close-chat" type="button" onclick="closeParentTeacherSidebar()">
+
+                    ✕
+
+                </button>
+
+            </div>
+
+
+            <!-- ================= SEARCH ================= -->
+
+            <div class="chat-search">
+
+                <input type="text" id="teacherSearch" placeholder="Search teachers..." onkeyup="searchParentTeachers()">
+
+            </div>
+
+
+            <!-- ================= TEACHER LIST ================= -->
+
+            <div class="conversation-list" id="teacherConversationList">
+
+
+                <!-- ================= MATHEMATICS ================= -->
+
+                <button class="conversation active" type="button" data-teacher="mathematics"
+                    onclick="openParentTeacher('mathematics')">
+
+
+                    <div class="conversation-avatar">
+                        MT
+                    </div>
+
+
+                    <div class="conversation-info">
+
+                        <strong>
+                            Mathematics Teacher
+                        </strong>
+
+                        <span>
+                            Mathematics • Online
+                        </span>
+
+                        <small>
+                            Please revise the multiplication chapter.
+                        </small>
+
+                    </div>
+
+
+                    <time>
+                        10:32 AM
+                    </time>
+
+                </button>
+
+
+                <!-- ================= ENGLISH ================= -->
+
+                <button class="conversation" type="button" data-teacher="english"
+                    onclick="openParentTeacher('english')">
+
+
+                    <div class="conversation-avatar">
+                        ET
+                    </div>
+
+
+                    <div class="conversation-info">
+
+                        <strong>
+                            English Teacher
+                        </strong>
+
+                        <span>
+                            English • Online
+                        </span>
+
+                        <small>
+                            Please complete the reading activity.
+                        </small>
+
+                    </div>
+
+
+                    <time>
+                        09:45 AM
+                    </time>
+
+                </button>
+
+
+                <!-- ================= SCIENCE ================= -->
+
+                <button class="conversation" type="button" data-teacher="science"
+                    onclick="openParentTeacher('science')">
+
+
+                    <div class="conversation-avatar">
+                        ST
+                    </div>
+
+
+                    <div class="conversation-info">
+
+                        <strong>
+                            Science Teacher
+                        </strong>
+
+                        <span>
+                            Science • Online
+                        </span>
+
+                        <small>
+                            Don't forget the science homework.
+                        </small>
+
+                    </div>
+
+
+                    <time>
+                        Yesterday
+                    </time>
+
+                </button>
+
+
+            </div>
+
+
+        </aside>
+
+
+
+        <!-- =====================================================
+             RIGHT SIDE
+             SELECTED CHAT
+             ===================================================== -->
+        <main class="chat-main">
+
+
+            <!-- =================================================
+                 CHAT HEADER
+                 ================================================= -->
+
+            <header class="chat-header">
+
+                <button class="mobile-chat-menu" type="button" onclick="openParentTeacherSidebar()">
+
+                    ☰
+
+                </button>
+
+
+                <div class="chat-user-avatar" id="parentTeacherAvatar">
+
+                    MT
+
+                </div>
+
+
+                <div class="chat-user-info">
+
+                    <h2 id="parentTeacherName">
+                        Mathematics Teacher
+                    </h2>
+
+                    <span id="parentTeacherStatus">
+                        Mathematics • Online
+                    </span>
+
+                </div>
+
+
+                <div class="chat-header-actions">
+
+                    <button type="button" title="Search">
+                        🔍
+                    </button>
+
+                    <button type="button" title="More">
+                        ⋮
+                    </button>
+
+                </div>
+
+
+                <!-- BACK TO PARENT DASHBOARD -->
+
+                <a href="{{ url_for('parent_dashboard') }}" class="voice-back-btn">
+
+                    ← Parent Dashboard
+
+                </a>
+
+            </header>
+
+
+            <!-- =================================================
+                 MESSAGES
+                 ================================================= -->
+
+            <section class="messages-area" id="parentMessages">
+
+
+            </section>
+
+
+
+            <!-- =================================================
+                 RECORDING PANEL
+                 ================================================= -->
+
+            <div class="recording-panel" id="recordingPanel">
+
+
+                <div class="recording-animation">
+                    🔴
+                </div>
+
+
+                <span>
+                    Recording voice message...
+                </span>
+
+
+                <span id="recordingTimer">
+                    00:00
+                </span>
+
+
+                <button type="button" onclick="stopParentRecording()">
+
+                    Stop
+
+                </button>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 CHAT INPUT
+                 ================================================= -->
+
+            <footer class="chat-input-area">
+
+
+                <button class="input-action" type="button" title="Attach">
+
+                    📎
+
+                </button>
+
+
+                <input type="text" id="parentMessageInput" placeholder="Type a message..." autocomplete="off"
+                    onkeydown="handleParentMessageKey(event)">
+
+
+                <button class="voice-record-button" id="parentRecordButton" type="button"
+                    onclick="startParentRecording()" title="Record voice">
+
+                    🎤
+
+                </button>
+
+
+                <button class="send-message-button" type="button" onclick="sendParentMessage()" title="Send message">
+
+                    ➤
+
+                </button>
+
+
+            </footer>
+
+
+        </main>
+
+
+    </div>
+
+
+
+    <!-- =========================================================
+         PARENT VOICE MESSAGE JAVASCRIPT
+         ========================================================= -->
+
+    <script>
+
+
+        /* =====================================================
+           TEACHER CHAT DATA
+           ===================================================== */
+
+        const parentTeacherChats = {
+
+            mathematics: {
+
+                name: "Mathematics Teacher",
+
+                avatar: "MT",
+
+                status: "Mathematics • Online",
+
+                preview:
+                    "Please revise the multiplication chapter.",
+
+                time: "10:32 AM",
+
+                messages: [
+
+                    {
+                        type: "sent",
+
+                        text:
+                            "Hello teacher. How is Rahul doing in mathematics?",
+
+                        time:
+                            "10:25 AM"
+
+                    },
+
+                    {
+                        type: "received",
+
+                        text:
+                            "Rahul is doing well. He should practise multiplication a little more.",
+
+                        time:
+                            "10:28 AM"
+
+                    },
+
+                    {
+                        type: "received",
+
+                        voice: true,
+
+                        duration:
+                            "0:18",
+
+                        time:
+                            "10:30 AM"
+
+                    },
+
+                    {
+                        type: "sent",
+
+                        text:
+                            "Thank you, teacher. I will make sure he practises it.",
+
+                        time:
+                            "10:32 AM"
+
+                    }
+
+                ]
+
+            },
+
+
+            english: {
+
+                name:
+                    "English Teacher",
+
+                avatar:
+                    "ET",
+
+                status:
+                    "English • Online",
+
+                preview:
+                    "Please complete the reading activity.",
+
+                time:
+                    "09:45 AM",
+
+                messages: [
+
+                    {
+
+                        type:
+                            "sent",
+
+                        text:
+                            "Hello teacher. How is Rahul doing in English?",
+
+                        time:
+                            "09:30 AM"
+
+                    },
+
+                    {
+
+                        type:
+                            "received",
+
+                        text:
+                            "He is doing well. Please encourage him to read for a few minutes every day.",
+
+                        time:
+                            "09:35 AM"
+
+                    },
+
+                    {
+
+                        type:
+                            "sent",
+
+                        text:
+                            "Sure teacher. We will continue the reading practice at home.",
+
+                        time:
+                            "09:45 AM"
+
+                    }
+
+                ]
+
+            },
+
+
+            science: {
+
+                name:
+                    "Science Teacher",
+
+                avatar:
+                    "ST",
+
+                status:
+                    "Science • Online",
+
+                preview:
+                    "Don't forget the science homework.",
+
+                time:
+                    "Yesterday",
+
+                messages: [
+
+                    {
+
+                        type:
+                            "sent",
+
+                        text:
+                            "Hello teacher. Did Rahul complete his science work?",
+
+                        time:
+                            "05:20 PM"
+
+                    },
+
+                    {
+
+                        type:
+                            "received",
+
+                        text:
+                            "He has completed most of it. Please remind him to finish the remaining questions.",
+
+                        time:
+                            "05:28 PM"
+
+                    },
+
+                    {
+
+                        type:
+                            "received",
+
+                        voice:
+                            true,
+
+                        duration:
+                            "0:24",
+
+                        time:
+                            "05:30 PM"
+
+                    }
+
+                ]
+
+            }
+
+        };
+
+
+
+        /* =====================================================
+           CURRENT TEACHER
+           ===================================================== */
+
+        let currentParentTeacher =
+            "mathematics";
+
+
+
+        /* =====================================================
+           GET CURRENT TIME
+           ===================================================== */
+
+        function getParentTime() {
+
+            return new Date().toLocaleTimeString(
+                [],
+                {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                }
+            );
+
+        }
+
+
+
+        /* =====================================================
+           OPEN SELECTED TEACHER
+           ===================================================== */
+
+        function openParentTeacher(teacherKey) {
+
+
+            const teacher =
+                parentTeacherChats[teacherKey];
+
+
+            if (!teacher) {
+                return;
+            }
+
+
+            currentParentTeacher =
+                teacherKey;
+
+
+            const teacherName =
+                document.getElementById(
+                    "parentTeacherName"
+                );
+
+
+            const teacherStatus =
+                document.getElementById(
+                    "parentTeacherStatus"
+                );
+
+
+            const teacherAvatar =
+                document.getElementById(
+                    "parentTeacherAvatar"
+                );
+
+
+            if (teacherName) {
+
+                teacherName.textContent =
+                    teacher.name;
+
+            }
+
+
+            if (teacherStatus) {
+
+                teacherStatus.textContent =
+                    teacher.status;
+
+            }
+
+
+            if (teacherAvatar) {
+
+                teacherAvatar.textContent =
+                    teacher.avatar;
+
+            }
+
+
+            /* -----------------------------------------
+               Update active teacher
+               ----------------------------------------- */
+
+            document
+                .querySelectorAll(".conversation")
+                .forEach(function (chat) {
+
+                    chat.classList.remove("active");
+
+                });
+
+
+            const selected =
+                document.querySelector(
+                    '.conversation[data-teacher="' +
+                    teacherKey +
+                    '"]'
+                );
+
+
+            if (selected) {
+
+                selected.classList.add("active");
+
+            }
+
+
+            /* -----------------------------------------
+               Display selected messages
+               ----------------------------------------- */
+
+            renderParentTeacherMessages(
+                teacher.messages
+            );
+
+
+            /* -----------------------------------------
+               Close mobile sidebar
+               ----------------------------------------- */
+
+            closeParentTeacherSidebar();
+
+        }
+
+
+
+        /* =====================================================
+           RENDER CHAT MESSAGES
+           ===================================================== */
+
+        function renderParentTeacherMessages(messages) {
+
+
+            const container =
+                document.getElementById(
+                    "parentMessages"
+                );
+
+
+            if (!container) {
+                return;
+            }
+
+
+            container.innerHTML = "";
+
+
+            /* Date */
+
+            const date =
+                document.createElement("div");
+
+
+            date.className =
+                "chat-date";
+
+
+            date.textContent =
+                "Today";
+
+
+            container.appendChild(date);
+
+
+
+            messages.forEach(function (message) {
+
+
+                /* =========================================
+                   TEXT MESSAGE
+                   ========================================= */
+
+                if (!message.voice) {
+
+
+                    const row =
+                        document.createElement("div");
+
+
+                    row.className =
+                        "message-row " +
+                        message.type;
+
+
+                    const bubble =
+                        document.createElement("div");
+
+
+                    bubble.className =
+                        "message-bubble";
+
+
+                    const text =
+                        document.createElement("p");
+
+
+                    text.textContent =
+                        message.text;
+
+
+                    const time =
+                        document.createElement("span");
+
+
+                    time.className =
+                        "message-time";
+
+
+                    time.textContent =
+                        message.time;
+
+
+                    bubble.appendChild(text);
+
+                    bubble.appendChild(time);
+
+                    row.appendChild(bubble);
+
+                    container.appendChild(row);
+
+                }
+
+
+                /* =========================================
+                   VOICE MESSAGE
+                   ========================================= */
+
+                else {
+
+
+                    const row =
+                        document.createElement("div");
+
+
+                    row.className =
+                        "message-row " +
+                        message.type;
+
+
+                    const wrapper =
+                        document.createElement("div");
+
+
+                    wrapper.className =
+                        "voice-message-wrapper";
+
+
+                    const voice =
+                        document.createElement("div");
+
+
+                    voice.className =
+                        "voice-message";
+
+
+                    const playButton =
+                        document.createElement("button");
+
+
+                    playButton.type =
+                        "button";
+
+
+                    playButton.className =
+                        "play-voice";
+
+
+                    playButton.textContent =
+                        "▶";
+
+
+                    playButton.onclick =
+                        function () {
+
+                            alert(
+                                "This is a sample voice message."
+                            );
+
+                        };
+
+
+                    const wave =
+                        document.createElement("div");
+
+
+                    wave.className =
+                        "voice-wave";
+
+
+                    for (
+                        let i = 0;
+                        i < 8;
+                        i++
+                    ) {
+
+                        const bar =
+                            document.createElement("span");
+
+                        wave.appendChild(bar);
+
+                    }
+
+
+                    const duration =
+                        document.createElement("span");
+
+
+                    duration.className =
+                        "voice-duration";
+
+
+                    duration.textContent =
+                        message.duration;
+
+
+                    voice.appendChild(playButton);
+
+                    voice.appendChild(wave);
+
+                    voice.appendChild(duration);
+
+
+                    const time =
+                        document.createElement("span");
+
+
+                    time.className =
+                        "message-time";
+
+
+                    time.textContent =
+                        message.time;
+
+
+                    wrapper.appendChild(voice);
+
+                    wrapper.appendChild(time);
+
+                    row.appendChild(wrapper);
+
+                    container.appendChild(row);
+
+                }
+
+            });
+
+
+            container.scrollTop =
+                container.scrollHeight;
+
+        }
+
+
+
+        /* =====================================================
+           SEARCH TEACHERS
+           ===================================================== */
+
+        function searchParentTeachers() {
+
+
+            const input =
+                document.getElementById(
+                    "teacherSearch"
+                );
+
+
+            if (!input) {
+                return;
+            }
+
+
+            const searchText =
+                input.value
+                    .trim()
+                    .toLowerCase();
+
+
+            document
+                .querySelectorAll(".conversation")
+                .forEach(function (chat) {
+
+
+                    const text =
+                        chat.innerText
+                            .toLowerCase();
+
+
+                    if (
+                        text.includes(searchText)
+                    ) {
+
+                        chat.style.display =
+                            "flex";
+
+                    }
+                    else {
+
+                        chat.style.display =
+                            "none";
+
+                    }
+
+                });
+
+        }
+
+
+
+        /* =====================================================
+           MOBILE SIDEBAR
+           ===================================================== */
+
+        function openParentTeacherSidebar() {
+
+
+            const sidebar =
+                document.getElementById(
+                    "chatSidebar"
+                );
+
+
+            if (sidebar) {
+
+                sidebar.classList.add(
+                    "active"
+                );
+
+            }
+
+        }
+
+
+
+        function closeParentTeacherSidebar() {
+
+
+            const sidebar =
+                document.getElementById(
+                    "chatSidebar"
+                );
+
+
+            if (sidebar) {
+
+                sidebar.classList.remove(
+                    "active"
+                );
+
+            }
+
+        }
+
+
+
+        /* =====================================================
+           APPEND TEXT MESSAGE
+           ===================================================== */
+
+        function appendParentTextMessage(text) {
+
+
+            const container =
+                document.getElementById(
+                    "parentMessages"
+                );
+
+
+            if (
+                !container ||
+                !text.trim()
+            ) {
+
+                return;
+
+            }
+
+
+            const row =
+                document.createElement("div");
+
+
+            row.className =
+                "message-row sent";
+
+
+            const bubble =
+                document.createElement("div");
+
+
+            bubble.className =
+                "message-bubble";
+
+
+            const textElement =
+                document.createElement("p");
+
+
+            textElement.textContent =
+                text;
+
+
+            const time =
+                document.createElement("span");
+
+
+            time.className =
+                "message-time";
+
+
+            time.textContent =
+                getParentTime();
+
+
+            bubble.appendChild(
+                textElement
+            );
+
+
+            bubble.appendChild(
+                time
+            );
+
+
+            row.appendChild(
+                bubble
+            );
+
+
+            container.appendChild(
+                row
+            );
+
+
+            container.scrollTop =
+                container.scrollHeight;
+
+        }
+
+
+
+        /* =====================================================
+           SEND MESSAGE
+           ===================================================== */
+
+        function sendParentMessage() {
+
+
+            const input =
+                document.getElementById(
+                    "parentMessageInput"
+                );
+
+
+            if (!input) {
+                return;
+            }
+
+
+            const text =
+                input.value.trim();
+
+
+            if (!text) {
+                return;
+            }
+
+
+            appendParentTextMessage(
+                text
+            );
+
+
+            input.value = "";
+
+        }
+
+
+
+        /* =====================================================
+           ENTER KEY
+           ===================================================== */
+
+        function handleParentMessageKey(event) {
+
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                event.preventDefault();
+
+                sendParentMessage();
+
+            }
+
+        }
+
+
+
+        /* =====================================================
+           VOICE RECORDING
+           ===================================================== */
+
+        let parentMediaRecorder =
+            null;
+
+
+        let parentAudioChunks =
+            [];
+
+
+        let parentRecordingInterval =
+            null;
+
+
+        let parentRecordingSeconds =
+            0;
+
+
+
+        /* =====================================================
+           START RECORDING
+           ===================================================== */
+
+        async function startParentRecording() {
+
+
+            const panel =
+                document.getElementById(
+                    "recordingPanel"
+                );
+
+
+            if (!panel) {
+                return;
+            }
+
+
+            try {
+
+
+                const stream =
+                    await navigator
+                        .mediaDevices
+                        .getUserMedia({
+                            audio: true
+                        });
+
+
+                parentMediaRecorder =
+                    new MediaRecorder(
+                        stream
+                    );
+
+
+                parentAudioChunks =
+                    [];
+
+
+                parentMediaRecorder.ondataavailable =
+                    function (event) {
+
+
+                        if (
+                            event.data &&
+                            event.data.size > 0
+                        ) {
+
+                            parentAudioChunks
+                                .push(
+                                    event.data
+                                );
+
+                        }
+
+                    };
+
+
+                parentMediaRecorder.onstop =
+                    function () {
+
+
+                        const audioBlob =
+                            new Blob(
+                                parentAudioChunks,
+                                {
+                                    type:
+                                        "audio/webm"
+                                }
+                            );
+
+
+                        addParentVoiceMessage(
+                            audioBlob,
+                            parentRecordingSeconds
+                        );
+
+
+                        stream
+                            .getTracks()
+                            .forEach(
+                                function (track) {
+
+                                    track.stop();
+
+                                }
+                            );
+
+                    };
+
+
+                parentMediaRecorder.start();
+
+
+                parentRecordingSeconds =
+                    0;
+
+
+                updateParentRecordingTimer();
+
+
+                panel.classList.add(
+                    "active"
+                );
+
+
+                parentRecordingInterval =
+                    setInterval(
+                        function () {
+
+                            parentRecordingSeconds++;
+
+                            updateParentRecordingTimer();
+
+                        },
+                        1000
+                    );
+
+
+            }
+            catch (error) {
+
+
+                alert(
+                    "Microphone permission is required to record a voice message."
+                );
+
+            }
+
+        }
+
+
+
+        /* =====================================================
+           STOP RECORDING
+           ===================================================== */
+
+        function stopParentRecording() {
+
+
+            if (
+                parentMediaRecorder &&
+                parentMediaRecorder.state !==
+                "inactive"
+            ) {
+
+                parentMediaRecorder.stop();
+
+            }
+
+
+            clearInterval(
+                parentRecordingInterval
+            );
+
+
+            const panel =
+                document.getElementById(
+                    "recordingPanel"
+                );
+
+
+            if (panel) {
+
+                panel.classList.remove(
+                    "active"
+                );
+
+            }
+
+        }
+
+
+
+        /* =====================================================
+           UPDATE RECORDING TIMER
+           ===================================================== */
+
+        function updateParentRecordingTimer() {
+
+
+            const timer =
+                document.getElementById(
+                    "recordingTimer"
+                );
+
+
+            if (!timer) {
+                return;
+            }
+
+
+            const minutes =
+                Math.floor(
+                    parentRecordingSeconds / 60
+                );
+
+
+            const seconds =
+                parentRecordingSeconds % 60;
+
+
+            timer.textContent =
+                String(minutes)
+                    .padStart(2, "0") +
+                ":" +
+                String(seconds)
+                    .padStart(2, "0");
+
+        }
+
+
+
+        /* =====================================================
+           FORMAT VOICE DURATION
+           ===================================================== */
+
+        function formatParentDuration(
+            totalSeconds
+        ) {
+
+
+            const minutes =
+                Math.floor(
+                    totalSeconds / 60
+                );
+
+
+            const seconds =
+                totalSeconds % 60;
+
+
+            return (
+                String(minutes) +
+                ":" +
+                String(seconds)
+                    .padStart(2, "0")
+            );
+
+        }
+
+
+
+        /* =====================================================
+           ADD RECORDED VOICE MESSAGE
+           ===================================================== */
+
+        function addParentVoiceMessage(
+            audioBlob,
+            durationSeconds
+        ) {
+
+
+            const container =
+                document.getElementById(
+                    "parentMessages"
+                );
+
+
+            if (!container) {
+                return;
+            }
+
+
+            const audioURL =
+                URL.createObjectURL(
+                    audioBlob
+                );
+
+
+            const row =
+                document.createElement("div");
+
+
+            row.className =
+                "message-row sent";
+
+
+            const wrapper =
+                document.createElement("div");
+
+
+            wrapper.className =
+                "voice-message-wrapper";
+
+
+            const voice =
+                document.createElement("div");
+
+
+            voice.className =
+                "voice-message";
+
+
+            const audio =
+                document.createElement("audio");
+
+
+            audio.src =
+                audioURL;
+
+
+            const button =
+                document.createElement("button");
+
+
+            button.type =
+                "button";
+
+
+            button.className =
+                "play-voice";
+
+
+            button.textContent =
+                "▶";
+
+
+            button.onclick =
+                function () {
+
+
+                    if (
+                        audio.paused
+                    ) {
+
+                        audio.play();
+
+                        button.textContent =
+                            "⏸";
+
+                    }
+                    else {
+
+                        audio.pause();
+
+                        button.textContent =
+                            "▶";
+
+                    }
+
+                };
+
+
+            audio.onended =
+                function () {
+
+                    button.textContent =
+                        "▶";
+
+                };
+
+
+            const wave =
+                document.createElement("div");
+
+
+            wave.className =
+                "voice-wave";
+
+
+            for (
+                let i = 0;
+                i < 8;
+                i++
+            ) {
+
+                const bar =
+                    document.createElement("span");
+
+                wave.appendChild(bar);
+
+            }
+
+
+            const duration =
+                document.createElement("span");
+
+
+            duration.className =
+                "voice-duration";
+
+
+            duration.textContent =
+                formatParentDuration(
+                    durationSeconds
+                );
+
+
+            voice.appendChild(
+                button
+            );
+
+
+            voice.appendChild(
+                wave
+            );
+
+
+            voice.appendChild(
+                duration
+            );
+
+
+            const time =
+                document.createElement("span");
+
+
+            time.className =
+                "message-time";
+
+
+            time.textContent =
+                "You • " +
+                getParentTime();
+
+
+            wrapper.appendChild(
+                voice
+            );
+
+
+            wrapper.appendChild(
+                audio
+            );
+
+
+            wrapper.appendChild(
+                time
+            );
+
+
+            row.appendChild(
+                wrapper
+            );
+
+
+            container.appendChild(
+                row
+            );
+
+
+            container.scrollTop =
+                container.scrollHeight;
+
+        }
+
+
+
+        /* =====================================================
+           INITIAL LOAD
+           ===================================================== */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                openParentTeacher(
+                    "mathematics"
+                );
+
+            }
+        );
+
+
+    </script>
+
+
+    <!-- =========================================================
+         SHARED JAVASCRIPT
+         ========================================================= -->
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Multilingual Support</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="page-bg language-bg">
+    <div class="page-content">
+        <div class="page-container">
+            <h1>Multilingual Support</h1>
+
+            <div class="card">
+                <h2>Select Language</h2>
+
+                <button class="btn" onclick="changeLanguage('English')">English</button>
+                <button class="btn" onclick="changeLanguage('Hindi')">Hindi</button>
+                <button class="btn" onclick="changeLanguage('Odia')">Odia</button>
+
+                <p id="language-text" style="margin-top:20px;">
+                    Welcome to Parent Teacher Bridge
+                </p>
+            </div>
+
+            <button class="btn" onclick="history.back()">Back</button>
+        </div>
+
+        <script>
+            function changeLanguage(lang) {
+                let text = document.getElementById("language-text");
+
+                if (lang === "English") {
+                    text.innerText = "Welcome to Parent Teacher Bridge";
+                }
+                else if (lang === "Hindi") {
+                    text.innerText = "पैरेंट टीचर ब्रिज में आपका स्वागत है";
+                }
+                else if (lang === "Odia") {
+                    text.innerText = "ପେରେଣ୍ଟ ଟିଚର ବ୍ରିଜ୍ କୁ ସ୍ୱାଗତ";
+                }
+            }
+        </script>
+    </div>
+</body>
+
+</html>

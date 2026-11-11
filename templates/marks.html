@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Marks</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body class="page-bg">
+
+
+    <div class="page-content">
+
+
+        <div class="marks-page">
+
+
+            <!-- =====================================================
+             HEADER
+        ====================================================== -->
+
+            <div class="marks-header">
+
+                <div class="marks-title-icon">
+                    📊
+                </div>
+
+                <div>
+
+                    <h1>
+                        Student Marks
+                    </h1>
+
+                    <p>
+                        Enter and manage academic marks
+                        for your students.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================================
+             SUMMARY
+        ====================================================== -->
+
+            <div class="marks-summary">
+
+
+                <!-- TOTAL STUDENTS -->
+
+                <div class="marks-summary-card">
+
+                    <div class="marks-summary-icon students">
+                        👥
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Total Students
+                        </span>
+
+                        <strong>
+                            {{ total_students }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SUBJECTS -->
+
+                <div class="marks-summary-card">
+
+                    <div class="marks-summary-icon subject">
+                        📚
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Subjects
+                        </span>
+
+                        <strong>
+                            {{ total_subjects }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- MAX MARKS -->
+
+                <div class="marks-summary-card">
+
+                    <div class="marks-summary-icon average">
+                        %
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Maximum Marks
+                        </span>
+
+                        <strong>
+                            {{ maximum_marks }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================================
+             MARKS FORM
+        ====================================================== -->
+
+            <form method="POST" action="{{ url_for('marks') }}">
+
+
+                <!-- =================================================
+                 MARKS CARD
+            ================================================== -->
+
+                <div class="marks-card">
+
+
+                    <!-- CARD HEADER -->
+
+                    <div class="marks-card-header">
+
+                        <div>
+
+                            <h2>
+                                Academic Performance
+                            </h2>
+
+                            <p>
+                                Enter marks out of 100
+                                for each subject.
+                            </p>
+
+                        </div>
+
+                        <div class="marks-info">
+
+                            📝 Marks / 100
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                     STUDENTS
+                ================================================== -->
+
+                    {% for student in students %}
+
+
+                    <div class="student-marks-row">
+
+
+                        <!-- STUDENT -->
+
+                        <div class="marks-student">
+
+
+                            <div class="marks-avatar">
+
+                                {{ student.student_name[:2]|upper }}
+
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+
+                                    {{ student.student_name }}
+
+                                </h3>
+
+                                <span>
+
+                                    Roll No.
+                                    {{ student.roll_number }}
+
+                                    {% if student.class %}
+
+                                    • Class
+                                    {{ student.class }}
+
+                                    {% endif %}
+
+                                </span>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <!-- =================================================
+                         MATHEMATICS
+                    ================================================== -->
+
+                        <div class="subject-mark">
+
+                            <label>
+                                Mathematics
+                            </label>
+
+                            <input type="number" min="0" max="100" name="marks_{{ student.student_id }}_mathematics"
+                                value="{{ student.mathematics }}" class="mark-input"
+                                oninput="calculateStudentMarks(this)" required>
+
+                        </div>
+
+
+                        <!-- =================================================
+                         SCIENCE
+                    ================================================== -->
+
+                        <div class="subject-mark">
+
+                            <label>
+                                Science
+                            </label>
+
+                            <input type="number" min="0" max="100" name="marks_{{ student.student_id }}_science"
+                                value="{{ student.science }}" class="mark-input" oninput="calculateStudentMarks(this)"
+                                required>
+
+                        </div>
+
+
+                        <!-- =================================================
+                         ENGLISH
+                    ================================================== -->
+
+                        <div class="subject-mark">
+
+                            <label>
+                                English
+                            </label>
+
+                            <input type="number" min="0" max="100" name="marks_{{ student.student_id }}_english"
+                                value="{{ student.english }}" class="mark-input" oninput="calculateStudentMarks(this)"
+                                required>
+
+                        </div>
+
+
+                        <!-- TOTAL -->
+
+                        <div class="marks-total">
+
+                            <span>
+                                Total
+                            </span>
+
+                            <strong class="student-total">
+
+                                {{ student.total_marks }}
+
+                            </strong>
+
+                        </div>
+
+
+                        <!-- AVERAGE -->
+
+                        <div class="marks-average">
+
+                            <span>
+                                Average
+                            </span>
+
+                            <strong class="student-average">
+
+                                {{ student.average_marks }}%
+
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+
+                    {% else %}
+
+
+                    <div class="student-marks-row">
+
+                        <div class="marks-student">
+
+                            <div>
+
+                                <h3>
+                                    No students found
+                                </h3>
+
+                                <span>
+                                    Add students from the
+                                    Admin Dashboard first.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    {% endfor %}
+
+
+                    <!-- =================================================
+                     ACTIONS
+                ================================================== -->
+
+                    <div class="marks-actions">
+
+
+                        <button type="button" class="marks-back-btn" onclick="history.back()">
+
+                            ← Back
+
+                        </button>
+
+
+                        <button type="submit" class="marks-save-btn">
+
+                            ✓ Save Marks
+
+                        </button>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =========================================================
+     PAGE JAVASCRIPT
+========================================================= -->
+
+    <script>
+
+        function calculateStudentMarks(input) {
+
+            /*
+             * Find current student row.
+             */
+
+            const row =
+                input.closest(
+                    ".student-marks-row"
+                );
+
+
+            if (!row) {
+                return;
+            }
+
+
+            /*
+             * Get all mark inputs
+             * of this student.
+             */
+
+            const inputs =
+                row.querySelectorAll(
+                    ".mark-input"
+                );
+
+
+            let total = 0;
+
+            let count = 0;
+
+
+            inputs.forEach(function (field) {
+
+                let value =
+                    Number(field.value);
+
+
+                if (isNaN(value)) {
+
+                    value = 0;
+
+                }
+
+
+                /*
+                 * Keep marks from
+                 * 0 to 100.
+                 */
+
+                if (value < 0) {
+
+                    value = 0;
+
+                    field.value = 0;
+
+                }
+
+
+                if (value > 100) {
+
+                    value = 100;
+
+                    field.value = 100;
+
+                }
+
+
+                /*
+                 * Count entered marks.
+                 */
+
+                if (
+                    field.value !== ""
+                ) {
+
+                    total += value;
+
+                    count++;
+
+                }
+
+            });
+
+
+            /*
+             * Calculate average.
+             */
+
+            const average =
+                count > 0
+                    ? total / count
+                    : 0;
+
+
+            /*
+             * Display total.
+             */
+
+            const totalElement =
+                row.querySelector(
+                    ".student-total"
+                );
+
+
+            if (totalElement) {
+
+                totalElement.textContent =
+                    Number.isInteger(total)
+                        ? total
+                        : total.toFixed(1);
+
+            }
+
+
+            /*
+             * Display average.
+             */
+
+            const averageElement =
+                row.querySelector(
+                    ".student-average"
+                );
+
+
+            if (averageElement) {
+
+                averageElement.textContent =
+                    average.toFixed(1) + "%";
+
+            }
+
+        }
+
+
+        /*
+         * Calculate all students
+         * when page opens.
+         */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const firstInput =
+                    document.querySelector(
+                        ".mark-input"
+                    );
+
+
+                if (!firstInput) {
+                    return;
+                }
+
+
+                const rows =
+                    document.querySelectorAll(
+                        ".student-marks-row"
+                    );
+
+
+                rows.forEach(function (row) {
+
+                    const input =
+                        row.querySelector(
+                            ".mark-input"
+                        );
+
+
+                    if (input) {
+
+                        calculateStudentMarks(
+                            input
+                        );
+
+                    }
+
+                });
+
+            }
+        );
+
+    </script>
+
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+
+</body>
+
+</html>

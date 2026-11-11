@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Scheme Eligibility Checker | Parent Teacher Bridge</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Bootstrap Icons -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+        rel="stylesheet"
+    >
+
+    <!-- Main CSS -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body class="scheme-page">
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar navbar-expand-lg navbar-dark scheme-navbar">
+
+    <div class="container">
+
+        <a class="navbar-brand fw-bold" href="/">
+            <i class="bi bi-mortarboard-fill"></i>
+            Parent Teacher Bridge
+        </a>
+
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#schemeNavbar"
+        >
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+
+        <div
+            class="collapse navbar-collapse"
+            id="schemeNavbar"
+        >
+
+            <ul class="navbar-nav ms-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/">
+                        <i class="bi bi-house"></i>
+                        Home
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:history.back()">
+                        <i class="bi bi-arrow-left"></i>
+                        Back
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="scheme-hero">
+
+    <div class="container text-center">
+
+        <div class="scheme-icon">
+
+            <i class="bi bi-gift-fill"></i>
+
+        </div>
+
+
+        <h1>
+            Government Scheme Eligibility Checker
+        </h1>
+
+
+        <p>
+            Find scholarships, educational benefits and
+            government schemes available for your child.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     MAIN CONTENT
+===================================================== -->
+
+<main class="container scheme-container">
+
+
+    <!-- =================================================
+         ELIGIBILITY FORM
+    ================================================== -->
+
+    <div class="scheme-form-card">
+
+        <div class="section-heading">
+
+            <div class="heading-icon">
+                <i class="bi bi-person-check-fill"></i>
+            </div>
+
+            <div>
+
+                <h2>
+                    Check Your Eligibility
+                </h2>
+
+                <p>
+                    Enter the student's information below.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <form id="eligibilityForm">
+
+
+            <div class="row g-4">
+
+
+                <!-- Student Class -->
+
+                <div class="col-md-4">
+
+                    <label
+                        for="studentClass"
+                        class="form-label"
+                    >
+                        <i class="bi bi-book"></i>
+                        Student Class
+                    </label>
+
+
+                    <select
+                        id="studentClass"
+                        class="form-select"
+                        required
+                    >
+
+                        <option value="">
+                            Select Class
+                        </option>
+
+                        <option value="1">
+                            Class 1
+                        </option>
+
+                        <option value="2">
+                            Class 2
+                        </option>
+
+                        <option value="3">
+                            Class 3
+                        </option>
+
+                        <option value="4">
+                            Class 4
+                        </option>
+
+                        <option value="5">
+                            Class 5
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Category -->
+
+                <div class="col-md-4">
+
+                    <label
+                        for="category"
+                        class="form-label"
+                    >
+                        <i class="bi bi-people-fill"></i>
+                        Category
+                    </label>
+
+
+                    <select
+                        id="category"
+                        class="form-select"
+                        required
+                    >
+
+                        <option value="">
+                            Select Category
+                        </option>
+
+                        <option value="general">
+                            General
+                        </option>
+
+                        <option value="obc">
+                            OBC
+                        </option>
+
+                        <option value="sc">
+                            SC
+                        </option>
+
+                        <option value="st">
+                            ST
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Income -->
+
+                <div class="col-md-4">
+
+                    <label
+                        for="familyIncome"
+                        class="form-label"
+                    >
+                        <i class="bi bi-currency-rupee"></i>
+                        Annual Family Income
+                    </label>
+
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+                            ₹
+                        </span>
+
+                        <input
+                            type="number"
+                            id="familyIncome"
+                            class="form-control"
+                            placeholder="Enter annual income"
+                            min="0"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- Button -->
+
+            <div class="text-center mt-4">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary scheme-check-btn"
+                >
+
+                    <i class="bi bi-search"></i>
+
+                    Check Eligibility
+
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+
+
+    <!-- =================================================
+         RESULT
+    ================================================== -->
+
+    <div
+        id="eligibilityResult"
+        class="eligibility-result d-none"
+    >
+
+        <div class="result-header">
+
+            <div>
+
+                <h2>
+                    Eligibility Results
+                </h2>
+
+                <p id="resultSummary">
+                    Checking available schemes...
+                </p>
+
+            </div>
+
+            <div class="result-icon">
+
+                <i class="bi bi-check-circle-fill"></i>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="schemeResults"
+            class="row g-4"
+        ></div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         AVAILABLE SCHEMES
+    ================================================== -->
+
+    <section class="available-schemes">
+
+        <div class="text-center mb-5">
+
+            <span class="section-badge">
+                Educational Benefits
+            </span>
+
+            <h2>
+                Available Government Schemes
+            </h2>
+
+            <p>
+                Explore some of the educational benefits
+                available to eligible students.
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+
+            <!-- Scholarship -->
+
+            <div class="col-lg-6">
+
+                <div class="scheme-card">
+
+                    <div class="scheme-card-header">
+
+                        <div class="scheme-card-icon scholarship">
+
+                            <i class="bi bi-award-fill"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Scholarship Scheme
+                            </h3>
+
+                            <span class="scheme-status">
+                                Student Support
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="scheme-details">
+
+                        <div class="detail-item">
+
+                            <i class="bi bi-mortarboard"></i>
+
+                            <div>
+
+                                <strong>
+                                    Eligibility
+                                </strong>
+
+                                <p>
+                                    Class 1 – 5
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <i class="bi bi-cash-stack"></i>
+
+                            <div>
+
+                                <strong>
+                                    Income Limit
+                                </strong>
+
+                                <p>
+                                    Below ₹2,00,000
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <i class="bi bi-file-earmark-text"></i>
+
+                            <div>
+
+                                <strong>
+                                    Documents
+                                </strong>
+
+                                <p>
+                                    Aadhaar Card, Income Certificate
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        class="btn btn-outline-primary scheme-info-btn"
+                        onclick="showSchemeInfo('Scholarship Scheme')"
+                    >
+
+                        View Details
+
+                        <i class="bi bi-arrow-right"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Mid Day Meal -->
+
+            <div class="col-lg-6">
+
+                <div class="scheme-card">
+
+                    <div class="scheme-card-header">
+
+                        <div class="scheme-card-icon meal">
+
+                            <i class="bi bi-egg-fried"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Mid-Day Meal Benefit
+                            </h3>
+
+                            <span class="scheme-status active">
+                                Ongoing
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="scheme-details">
+
+                        <div class="detail-item">
+
+                            <i class="bi bi-mortarboard"></i>
+
+                            <div>
+
+                                <strong>
+                                    Eligibility
+                                </strong>
+
+                                <p>
+                                    All Primary Students
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <i class="bi bi-check-circle"></i>
+
+                            <div>
+
+                                <strong>
+                                    Status
+                                </strong>
+
+                                <p>
+                                    Currently Ongoing
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <i class="bi bi-file-earmark-text"></i>
+
+                            <div>
+
+                                <strong>
+                                    Documents
+                                </strong>
+
+                                <p>
+                                    School ID Card
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        class="btn btn-outline-success scheme-info-btn"
+                        onclick="showSchemeInfo('Mid-Day Meal Benefit')"
+                    >
+
+                        View Details
+
+                        <i class="bi bi-arrow-right"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="scheme-footer">
+
+    <div class="container">
+
+        <div class="row g-4">
+
+
+            <div class="col-md-6">
+
+                <h5>
+                    <i class="bi bi-mortarboard-fill"></i>
+                    Parent Teacher Bridge
+                </h5>
+
+                <p>
+                    Connecting parents, teachers and schools
+                    through technology.
+                </p>
+
+            </div>
+
+
+            <div class="col-md-6">
+
+                <h5>
+                    Quick Links
+                </h5>
+
+                <a href="/">
+                    Home
+                </a>
+
+                <a href="/login">
+                    Login
+                </a>
+
+                <a href="/signup">
+                    Sign Up
+                </a>
+
+            </div>
+
+
+        </div>
+
+
+        <hr>
+
+
+        <p class="text-center mb-0">
+
+            © 2026 Parent Teacher Bridge |
+            Developed as a Minor Project |
+            Ravenshaw University
+
+        </p>
+
+    </div>
+
+</footer>
+
+
+
+<!-- =====================================================
+     SCHEME INFORMATION MODAL
+===================================================== -->
+
+<div
+    class="modal fade"
+    id="schemeInfoModal"
+    tabindex="-1"
+>
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5
+                    class="modal-title"
+                    id="schemeModalTitle"
+                >
+                    Scheme Details
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                ></button>
+
+            </div>
+
+
+            <div
+                class="modal-body"
+                id="schemeModalBody"
+            >
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    Close
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- Bootstrap JS -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+<!-- Scheme JS -->
+
+<script
+    src="{{ url_for('static', filename='schemes.js') }}">
+</script>
+
+
+</body>
+
+</html>

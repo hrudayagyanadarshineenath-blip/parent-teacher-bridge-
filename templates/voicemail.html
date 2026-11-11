@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Voice Messages | Parent Teacher Bridge</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body class="page-bg">
+
+
+    <!-- =====================================================
+         VOICE MESSAGE APPLICATION
+    ====================================================== -->
+
+    <div class="voice-app">
+
+
+        <!-- =================================================
+             LEFT SIDE
+             TEACHER CONVERSATION LIST
+        ================================================== -->
+
+        <aside class="chat-sidebar" id="chatSidebar">
+
+            <div class="chat-sidebar-header">
+
+                <div>
+
+                    <h2>💬 Messages</h2>
+
+                    <p>Parent Teacher Bridge</p>
+
+                </div>
+
+                <button class="mobile-close-chat"
+                        onclick="closeChatSidebar()">
+
+                    ✕
+
+                </button>
+
+            </div>
+
+
+            <!-- Search -->
+
+            <div class="chat-search">
+
+                <input type="text"
+                       id="chatSearch"
+                       placeholder="Search parents..."
+                       onkeyup="searchChats()">
+
+            </div>
+
+
+            <!-- Conversation List -->
+
+            <div class="conversation-list"
+                 id="conversationList">
+
+
+                <button class="conversation active"
+                        onclick="openConversation('Rahul Kumar')">
+
+                    <div class="conversation-avatar">
+                        RK
+                    </div>
+
+                    <div class="conversation-info">
+
+                        <strong>
+                            Rahul Kumar
+                        </strong>
+
+                        <span>
+                            Parent
+                        </span>
+
+                        <small>
+                            Thank you, teacher.
+                        </small>
+
+                    </div>
+
+                    <time>
+                        10:32 AM
+                    </time>
+
+                </button>
+
+
+
+                <button class="conversation"
+                        onclick="openConversation('Priya Das')">
+
+                    <div class="conversation-avatar">
+                        PD
+                    </div>
+
+                    <div class="conversation-info">
+
+                        <strong>
+                            Priya Das
+                        </strong>
+
+                        <span>
+                            Parent
+                        </span>
+
+                        <small>
+                            I will check the homework.
+                        </small>
+
+                    </div>
+
+                    <time>
+                        09:45 AM
+                    </time>
+
+                </button>
+
+
+
+                <button class="conversation"
+                        onclick="openConversation('Rohan Mishra')">
+
+                    <div class="conversation-avatar">
+                        RM
+                    </div>
+
+                    <div class="conversation-info">
+
+                        <strong>
+                            Rohan Mishra
+                        </strong>
+
+                        <span>
+                            Parent
+                        </span>
+
+                        <small>
+                            🎤 Voice message
+                        </small>
+
+                    </div>
+
+                    <time>
+                        Yesterday
+                    </time>
+
+                </button>
+
+
+
+                <button class="conversation"
+                        onclick="openConversation('Anjali Sahoo')">
+
+                    <div class="conversation-avatar">
+                        AS
+                    </div>
+
+                    <div class="conversation-info">
+
+                        <strong>
+                            Anjali Sahoo
+                        </strong>
+
+                        <span>
+                            Parent
+                        </span>
+
+                        <small>
+                            Good morning teacher.
+                        </small>
+
+                    </div>
+
+                    <time>
+                        Yesterday
+                    </time>
+
+                </button>
+
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- =================================================
+             MAIN CHAT AREA
+        ================================================== -->
+
+        <main class="chat-main">
+
+
+            <!-- Chat Header -->
+
+            <header class="chat-header">
+
+                <button class="mobile-chat-menu"
+                        onclick="openChatSidebar()">
+
+                    ☰
+
+                </button>
+
+
+                <div class="chat-user-avatar">
+
+                    RK
+
+                </div>
+
+
+                <div class="chat-user-info">
+
+                    <h2 id="chatUserName">
+                        Rahul Kumar
+                    </h2>
+
+                    <span id="chatUserStatus">
+                        Parent • Online
+                    </span>
+
+                </div>
+
+
+                <div class="chat-header-actions">
+
+                    <button title="Search">
+                        🔍
+                    </button>
+
+                    <button title="More">
+                        ⋮
+                    </button>
+
+                </div>
+                <a href="{{ url_for('teacher_dashboard') }}" class="voice-back-btn">
+                    ← Back To Teacher Dashboard
+                </a>
+
+            </header>
+
+
+
+            <!-- =================================================
+                 CHAT MESSAGES
+            ================================================== -->
+
+            <section class="messages-area"
+                     id="messagesArea">
+
+
+                <div class="chat-date">
+                    Today
+                </div>
+
+
+
+                <!-- Teacher Message -->
+
+                <div class="message-row sent">
+
+                    <div class="message-bubble">
+
+                        <p>
+                            Hello! How is Rahul doing
+                            with his mathematics homework?
+                        </p>
+
+                        <span class="message-time">
+                            10:25 AM ✓✓
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Parent Message -->
+
+                <div class="message-row received">
+
+                    <div class="message-bubble">
+
+                        <p>
+                            Hello teacher. He is doing
+                            well and completed most of it.
+                        </p>
+
+                        <span class="message-time">
+                            10:28 AM
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Voice Message -->
+
+                <div class="message-row received">
+
+                    <div class="voice-message">
+
+                        <button class="play-voice"
+                                onclick="playVoiceMessage(this)">
+
+                            ▶
+
+                        </button>
+
+                        <div class="voice-wave">
+
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+
+                        </div>
+
+                        <span class="voice-duration">
+                            0:18
+                        </span>
+
+                    </div>
+
+                    <span class="message-time">
+                        10:30 AM
+                    </span>
+
+                </div>
+
+
+
+                <!-- Teacher Reply -->
+
+                <div class="message-row sent">
+
+                    <div class="message-bubble">
+
+                        <p>
+                            That's great. Please make sure
+                            he revises the multiplication
+                            chapter before Friday.
+                        </p>
+
+                        <span class="message-time">
+                            10:32 AM ✓✓
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+            </section>
+
+
+
+            <!-- =================================================
+                 RECORDING INDICATOR
+            ================================================== -->
+
+            <div class="recording-panel"
+                 id="recordingPanel">
+
+                <div class="recording-animation">
+                    🔴
+                </div>
+
+                <span>
+                    Recording voice message...
+                </span>
+
+                <span id="recordingTimer">
+                    00:00
+                </span>
+
+                <button onclick="stopRecording()">
+                    Stop
+                </button>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 CHAT INPUT
+            ================================================== -->
+
+            <footer class="chat-input-area">
+
+
+                <button class="input-action"
+                        title="Attach">
+
+                    📎
+
+                </button>
+
+
+                <input type="text"
+                       id="messageInput"
+                       placeholder="Type a message..."
+                       onkeydown="handleMessageKey(event)">
+
+
+                <button class="voice-record-button"
+                        id="recordButton"
+                        onclick="startRecording()"
+                        title="Record voice">
+
+                    🎤
+
+                </button>
+
+
+                <button class="send-message-button"
+                        onclick="sendMessage()"
+                        title="Send message">
+
+                    ➤
+
+                </button>
+
+
+            </footer>
+
+
+        </main>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         SHARED JAVASCRIPT
+    ====================================================== -->
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Parent Teacher Bridge</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+
+    <header class="navbar">
+
+        <div class="logo">
+            Parent Teacher Bridge
+        </div>
+
+        <nav class="nav-links">
+
+            <a href="/">Home</a>
+
+            <a href="/login">Login</a>
+
+            
+
+            <select class="language-select"
+                    onchange="setLanguage(this.value)">
+
+                <option value="english">English</option>
+                <option value="hindi">Hindi</option>
+                <option value="odia">Odia</option>
+
+            </select>
+
+        </nav>
+
+    </header>
+
+
+    <!-- ================= HERO SLIDER ================= -->
+
+    <section class="hero-slider">
+
+        <div class="slides">
+
+          <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7"
+              class="slide active"
+              alt="Classroom learning">
+
+         <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d"
+             class="slide"
+              alt="Science laboratory">
+
+        </div>
+
+        <div class="hero-overlay">
+
+            <h1>Parent Teacher Bridge</h1>
+
+            <p>
+                Connecting parents, teachers and schools
+                through technology.
+            </p>
+
+            <a href="/login" class="hero-button">
+                Get Started
+            </a>
+
+        </div>
+
+        <button class="slider-btn prev"
+                onclick="changeSlide(-1)">
+            ❮
+        </button>
+
+        <button class="slider-btn next"
+                onclick="changeSlide(1)">
+            ❯
+        </button>
+
+        <div class="slider-dots">
+
+            <span class="dot active-dot"
+                  onclick="currentSlide(0)">
+            </span>
+
+            <span class="dot"
+                  onclick="currentSlide(1)">
+            </span>
+
+            <span class="dot"
+                  onclick="currentSlide(2)">
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= ABOUT ================= -->
+
+    <section class="about-section">
+
+        <div class="section-heading">
+
+            <h2>About Parent Teacher Bridge</h2>
+
+            <p>
+                Parent Teacher Bridge is a smart educational
+                communication platform designed to improve
+                communication between schools, teachers and parents.
+            </p>
+
+        </div>
+
+        <div class="about-content">
+
+            <div class="about-image">
+
+                <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7"
+                     alt="Classroom learning">
+
+            </div>
+
+            <div class="about-text">
+
+                <h3>Smart School Communication</h3>
+
+                <p>
+                    The platform provides a simple digital environment
+                    where teachers can manage academic information
+                    and parents can stay informed about their child's
+                    education and school activities.
+                </p>
+
+                <p>
+                    Parent Teacher Bridge aims to create a stronger
+                    connection between home and school through
+                    accessible digital communication.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= BETTER COMMUNICATION ================= -->
+
+    <section class="info-section">
+
+        <div class="info-image">
+
+            <img src="https://images.unsplash.com/photo-1544717305-2782549b5136"
+                 alt="Teacher and students">
+
+        </div>
+
+        <div class="about-text">
+
+            <h3>Better Communication</h3>
+
+            <p>
+                Parent Teacher Bridge creates a direct communication
+                channel between parents and teachers.
+            </p>
+
+            <p>
+                Important academic information, school updates and
+                student progress can be communicated more easily.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= DIGITAL LEARNING ================= -->
+
+    <section class="info-section reverse">
+
+        <div class="about-text">
+
+            <h3>Digital Learning Environment</h3>
+
+            <p>
+                The platform supports a modern digital environment
+                for managing educational information.
+            </p>
+
+            <p>
+                Teachers and parents can access relevant information
+                through their respective accounts after login.
+            </p>
+
+        </div>
+
+        <div class="info-image">
+
+            <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d"
+                 alt="Science laboratory">
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= ACADEMIC SUPPORT ================= -->
+
+    <section class="info-section">
+
+        <div class="info-image">
+
+            <img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6"
+                 alt="School library">
+
+        </div>
+
+        <div class="about-text">
+
+            <h3>Academic Support</h3>
+
+            <p>
+                Schools can provide useful academic information
+                while parents can remain aware of their child's
+                educational development.
+            </p>
+
+            <p>
+                This helps create a stronger connection between
+                home and school.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= STUDENT DEVELOPMENT ================= -->
+
+    <section class="info-section reverse">
+
+        <div class="about-text">
+
+            <h3>Student Development</h3>
+
+            <p>
+                Education is not limited to classroom learning.
+                Sports, activities and overall student development
+                are also important parts of school life.
+            </p>
+
+            <p>
+                Parent Teacher Bridge aims to support communication
+                around the complete educational experience.
+            </p>
+
+        </div>
+
+        <div class="info-image">
+
+            <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211"
+                 alt="Students participating in sports">
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= CALL TO ACTION ================= -->
+
+    <section class="connect-section">
+
+        <h3>Ready to Connect?</h3>
+
+        <p>
+            Join Parent Teacher Bridge and make
+            school-parent communication easier.
+        </p>
+
+        <a href="/signup" class="hero-button">
+            Create Account
+        </a>
+
+    </section>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <div class="footer-container">
+
+            <div class="footer-column">
+
+                <h3>Parent Teacher Bridge</h3>
+
+                <p>
+                    Connecting parents, teachers and schools
+                    through technology.
+                </p>
+
+            </div>
+
+
+            <div class="footer-column">
+
+                <h3>Quick Links</h3>
+
+                <a href="/">Home</a>
+
+                <a href="/login">Login</a>
+
+                <a href="/signup">Sign Up</a>
+
+            </div>
+
+
+            <!-- ================= HELP US ================= -->
+
+            <div class="footer-column">
+
+                <h3>Help Us</h3>
+
+                <a href="javascript:void(0)"
+                   onclick="openContactPopup()">
+                    Contact Us
+                </a>
+
+                <a href="javascript:void(0)"
+                   onclick="openQueryPopup()">
+                    Submit Your Query
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            <p>
+                © 2026 Parent Teacher Bridge |
+                Developed as a Minor Project |
+                Ravenshaw University
+            </p>
+
+        </div>
+
+
+        <!-- ================= CONTACT POPUP ================= -->
+
+        <div id="contactPopup"
+             class="footer-popup">
+
+            <div class="footer-popup-content">
+
+                <button type="button"
+                        class="footer-popup-close"
+                        onclick="closeContactPopup()">
+                    ×
+                </button>
+
+                <h2>Contact Us</h2>
+
+                <p>
+                    You can contact the Parent Teacher Bridge
+                    support team using the details below.
+                </p>
+
+                <div class="contact-details">
+
+                    <p>
+                        📞
+                        <strong>Phone:</strong>
+                        <a href="tel:+919876543210">
+                            +91 98765 43210
+                        </a>
+                    </p>
+
+                    <p>
+                        ✉️
+                        <strong>Email:</strong>
+                        <a href="mailto:support@parentteacherbridge.com">
+                            support@parentteacherbridge.com
+                        </a>
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= QUERY POPUP ================= -->
+
+        <div id="queryPopup"
+             class="footer-popup">
+
+            <div class="footer-popup-content">
+
+                <button type="button"
+                        class="footer-popup-close"
+                        onclick="closeQueryPopup()">
+                    ×
+                </button>
+
+                <h2>Submit Your Query</h2>
+
+                <p>
+                    Have any question, suggestion or problem?
+                    Send us your query.
+                </p>
+
+                <form id="footerQueryForm"
+                      onsubmit="submitFooterQuery(event)">
+
+                    <label for="queryName">
+                        Your Name
+                    </label>
+
+                    <input type="text"
+                           id="queryName"
+                           name="name"
+                           placeholder="Enter your name"
+                           required>
+
+
+                    <label for="queryEmail">
+                        Email
+                    </label>
+
+                    <input type="email"
+                           id="queryEmail"
+                           name="email"
+                           placeholder="Enter your email"
+                           required>
+
+
+                    <label for="queryMessage">
+                        Your Query
+                    </label>
+
+                    <textarea id="queryMessage"
+                              name="query"
+                              rows="5"
+                              placeholder="Write your query here..."
+                              required></textarea>
+
+
+                    <button type="submit"
+                            class="footer-query-button">
+                        Submit Query
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= FOOTER POPUP CSS ================= -->
+
+        <style>
+
+            .footer-popup {
+                display: none;
+                position: fixed;
+                z-index: 9999;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.65);
+                justify-content: center;
+                align-items: center;
+                padding: 20px;
+            }
+
+
+            .footer-popup.active {
+                display: flex;
+            }
+
+
+            .footer-popup-content {
+                position: relative;
+                width: 100%;
+                max-width: 500px;
+                background: #ffffff;
+                border-radius: 16px;
+                padding: 30px;
+                box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+                animation: footerPopupAnimation 0.25s ease;
+            }
+
+
+            @keyframes footerPopupAnimation {
+
+                from {
+                    opacity: 0;
+                    transform: translateY(-20px) scale(0.96);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                }
+
+            }
+
+
+            .footer-popup-content h2 {
+                margin-top: 0;
+                margin-bottom: 10px;
+                color: #4b2e1f;
+            }
+
+
+            .footer-popup-content p {
+                color: #555555;
+                line-height: 1.6;
+            }
+
+
+            .footer-popup-close {
+                position: absolute;
+                top: 10px;
+                right: 15px;
+                border: none;
+                background: transparent;
+                font-size: 30px;
+                cursor: pointer;
+                color: #555555;
+            }
+
+
+            .footer-popup-close:hover {
+                color: #000000;
+            }
+
+
+            .contact-details {
+                margin-top: 20px;
+                padding: 18px;
+                background: #f8f4ef;
+                border-radius: 12px;
+            }
+
+
+            .contact-details p {
+                margin: 12px 0;
+            }
+
+
+            .contact-details a {
+                color: #7b4a2f;
+                text-decoration: none;
+            }
+
+
+            .contact-details a:hover {
+                text-decoration: underline;
+            }
+
+
+            #footerQueryForm {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                margin-top: 20px;
+            }
+
+
+            #footerQueryForm label {
+                font-weight: 600;
+                color: #4b2e1f;
+                margin-top: 8px;
+            }
+
+
+            #footerQueryForm input,
+            #footerQueryForm textarea {
+                width: 100%;
+                box-sizing: border-box;
+                padding: 12px 14px;
+                border: 1px solid #d8d0c8;
+                border-radius: 8px;
+                font-size: 15px;
+                font-family: inherit;
+                outline: none;
+            }
+
+
+            #footerQueryForm input:focus,
+            #footerQueryForm textarea:focus {
+                border-color: #b07a3e;
+            }
+
+
+            .footer-query-button {
+                margin-top: 15px;
+                border: none;
+                border-radius: 8px;
+                padding: 12px 18px;
+                background: #d8a928;
+                color: #2d1b10;
+                font-weight: 700;
+                cursor: pointer;
+            }
+
+
+            .footer-query-button:hover {
+                background: #c99817;
+            }
+
+
+            @media (max-width: 600px) {
+
+                .footer-popup-content {
+                    padding: 24px 20px;
+                    max-height: 90vh;
+                    overflow-y: auto;
+                }
+
+            }
+
+        </style>
+
+
+        <!-- ================= FOOTER POPUP JAVASCRIPT ================= -->
+
+        <script>
+
+            function openContactPopup() {
+
+                const popup =
+                    document.getElementById("contactPopup");
+
+                if (popup) {
+                    popup.classList.add("active");
+                }
+
+            }
+
+
+            function closeContactPopup() {
+
+                const popup =
+                    document.getElementById("contactPopup");
+
+                if (popup) {
+                    popup.classList.remove("active");
+                }
+
+            }
+
+
+            function openQueryPopup() {
+
+                const popup =
+                    document.getElementById("queryPopup");
+
+                if (popup) {
+                    popup.classList.add("active");
+                }
+
+            }
+
+
+            function closeQueryPopup() {
+
+                const popup =
+                    document.getElementById("queryPopup");
+
+                if (popup) {
+                    popup.classList.remove("active");
+                }
+
+            }
+
+
+            function submitFooterQuery(event) {
+
+                event.preventDefault();
+
+                const name =
+                    document.getElementById("queryName").value.trim();
+
+                const email =
+                    document.getElementById("queryEmail").value.trim();
+
+                const query =
+                    document.getElementById("queryMessage").value.trim();
+
+
+                if (!name || !email || !query) {
+
+                    alert("Please fill all the fields.");
+
+                    return;
+
+                }
+
+
+                alert(
+                    "Thank you, " +
+                    name +
+                    "!\n\nYour query has been received."
+                );
+
+
+                document
+                    .getElementById("footerQueryForm")
+                    .reset();
+
+                closeQueryPopup();
+
+            }
+
+
+            /* Close popup by clicking outside */
+
+            window.addEventListener("click", function(event) {
+
+                const contactPopup =
+                    document.getElementById("contactPopup");
+
+                const queryPopup =
+                    document.getElementById("queryPopup");
+
+
+                if (event.target === contactPopup) {
+                    closeContactPopup();
+                }
+
+
+                if (event.target === queryPopup) {
+                    closeQueryPopup();
+                }
+
+            });
+
+
+            /* Close popup using Escape key */
+
+            window.addEventListener("keydown", function(event) {
+
+                if (event.key === "Escape") {
+
+                    closeContactPopup();
+
+                    closeQueryPopup();
+
+                }
+
+            });
+
+        </script>
+
+    </footer>
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <script src="{{ url_for('static', filename='script.js') }}">
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | Parent Teacher Bridge</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+
+    <style>
+        .admin-page:has(#adminSidebar.active) .admin-settings-button {
+            display: none !important;
+        }
+    </style>
+
+</head>
+
+
+<body class="admin-page">
+
+
+    <!-- =====================================================
+         ADMIN SETTINGS BUTTON
+    ====================================================== -->
+
+    <button
+        class="admin-settings-button"
+        onclick="toggleAdminSidebar()"
+        title="Open Admin Menu"
+        aria-label="Open Admin Menu">
+
+        ⚙️
+
+    </button>
+
+
+    <!-- =====================================================
+         ADMIN SIDEBAR
+    ====================================================== -->
+
+    <aside
+        id="adminSidebar"
+        class="admin-sidebar">
+
+
+        <!-- SIDEBAR HEADER -->
+
+        <div class="admin-sidebar-header">
+
+            <div>
+
+                <h2>
+                    🛠️ Admin Panel
+                </h2>
+
+                <span>
+                    Management Menu
+                </span>
+
+            </div>
+
+
+            <!-- CLOSE BUTTON -->
+
+            <button
+                class="admin-close-sidebar"
+                onclick="toggleAdminSidebar()"
+                aria-label="Close Admin Menu">
+
+                ✕
+
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             SIDEBAR NAVIGATION
+        ================================================== -->
+
+        <nav class="admin-sidebar-nav">
+
+
+            <!-- ADMIN DASHBOARD -->
+
+            <a
+                href="{{ url_for('admin_dashboard') }}"
+                onclick="closeAdminSidebar()">
+
+                🏠
+
+                <span>
+                    Admin Dashboard
+                </span>
+
+            </a>
+
+
+            <!-- TEACHER DASHBOARD -->
+
+            <a
+                href="{{ url_for('teacher_dashboard') }}"
+                onclick="closeAdminSidebar()">
+
+                👨‍🏫
+
+                <span>
+                    Teacher Dashboard
+                </span>
+
+            </a>
+
+
+            <!-- STUDENT / PARENT DASHBOARD -->
+
+            <a
+                href="{{ url_for('parent_dashboard') }}"
+                onclick="closeAdminSidebar()">
+
+                👨‍🎓
+
+                <span>
+                    Student / Parent Dashboard
+                </span>
+
+            </a>
+
+
+            <!-- TEACHERS SECTION -->
+
+            <a
+                href="#teachers"
+                onclick="closeAdminSidebar()">
+
+                👥
+
+                <span>
+                    Teachers
+                </span>
+
+            </a>
+
+
+            <!-- PARENTS SECTION -->
+
+            <a
+                href="#parents"
+                onclick="closeAdminSidebar()">
+
+                👪
+
+                <span>
+                    Parents
+                </span>
+
+            </a>
+
+
+            <!-- STUDENTS SECTION -->
+
+            <a
+                href="#students"
+                onclick="closeAdminSidebar()">
+
+                🎓
+
+                <span>
+                    Students
+                </span>
+
+            </a>
+
+
+            <!-- GOVERNMENT SCHEMES -->
+
+            <a
+                href="#schemes"
+                onclick="closeAdminSidebar()">
+
+                📚
+
+                <span>
+                    Schemes
+                </span>
+
+            </a>
+
+
+            <!-- LOGOUT -->
+
+            <a
+                href="{{ url_for('logout') }}">
+
+                🚪
+
+                <span>
+                    Logout
+                </span>
+
+            </a>
+
+
+        </nav>
+
+
+    </aside>
+
+
+    <!-- =====================================================
+         SIDEBAR OVERLAY
+    ====================================================== -->
+
+    <div
+        id="adminSidebarOverlay"
+        class="admin-sidebar-overlay"
+        onclick="closeAdminSidebar()">
+    </div>
+
+
+    <!-- =====================================================
+         TOP NAVBAR
+    ====================================================== -->
+
+    <nav class="navbar admin-navbar">
+
+
+        <div class="nav-brand">
+
+            Parent-Teacher Bridge
+
+        </div>
+
+
+        <div class="nav-links">
+
+
+            <a href="{{ url_for('home') }}">
+
+                Home
+
+            </a>
+
+
+            <a href="{{ url_for('admin_dashboard') }}">
+
+                Dashboard
+
+            </a>
+
+
+            <a href="{{ url_for('logout') }}">
+
+                Logout
+
+            </a>
+
+
+        </div>
+
+
+    </nav>
+
+
+    <!-- =====================================================
+         MAIN CONTAINER
+    ====================================================== -->
+
+    <main class="admin-container">
+
+
+        <!-- =================================================
+             HEADER
+        ================================================== -->
+
+        <div class="admin-header">
+
+            <h1>
+                Admin Dashboard
+            </h1>
+
+            <p>
+                Manage teachers, parents, students and government
+                schemes.
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             FLASH MESSAGES
+        ================================================== -->
+
+        {% with messages = get_flashed_messages() %}
+
+            {% if messages %}
+
+                <div class="flash-container">
+
+                    {% for message in messages %}
+
+                        <div class="flash-message">
+
+                            {{ message }}
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <!-- =================================================
+             DASHBOARD SUMMARY CARDS
+        ================================================== -->
+
+        <div class="admin-cards">
+
+
+            <!-- TOTAL TEACHERS -->
+
+            <div class="admin-card">
+
+                <h3>
+                    Total Teachers
+                </h3>
+
+                <div class="admin-number">
+
+                    {{ teachers|length }}
+
+                </div>
+
+            </div>
+
+
+            <!-- TOTAL PARENTS -->
+
+            <div class="admin-card">
+
+                <h3>
+                    Total Parents
+                </h3>
+
+                <div class="admin-number">
+
+                    {{ parents|length }}
+
+                </div>
+
+            </div>
+
+
+            <!-- TOTAL STUDENTS -->
+
+            <div class="admin-card">
+
+                <h3>
+                    Total Students
+                </h3>
+
+                <div class="admin-number">
+
+                    {{ students|length }}
+
+                </div>
+
+            </div>
+
+
+            <!-- TOTAL SCHEMES -->
+
+            <div class="admin-card">
+
+                <h3>
+                    Total Schemes
+                </h3>
+
+                <div class="admin-number">
+
+                    {{ schemes|length }}
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =================================================
+             TEACHERS
+        ================================================== -->
+
+        <section
+            id="teachers"
+            class="admin-section">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>
+                        Teachers
+                    </h2>
+
+                    <p>
+                        Add or remove teacher accounts.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ADD TEACHER -->
+
+            <form
+                method="POST"
+                action="{{ url_for('add_teacher') }}"
+                class="admin-form">
+
+
+                <input
+                    type="text"
+                    name="full_name"
+                    placeholder="Full Name"
+                    required>
+
+
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Username"
+                    required>
+
+
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    required>
+
+
+                <input
+                    type="text"
+                    name="class_assigned"
+                    placeholder="Class Assigned"
+                    required>
+
+
+                <button
+                    type="submit"
+                    class="add-btn">
+
+                    + Add Teacher
+
+                </button>
+
+
+            </form>
+
+
+            <!-- TEACHER TABLE -->
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Full Name</th>
+
+                            <th>Username</th>
+
+                            <th>Class</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for teacher in teachers %}
+
+                        <tr>
+
+                            <td>
+                                {{ teacher.teacher_id }}
+                            </td>
+
+                            <td>
+                                {{ teacher.full_name }}
+                            </td>
+
+                            <td>
+                                {{ teacher.username }}
+                            </td>
+
+                            <td>
+                                {{ teacher.class_assigned }}
+                            </td>
+
+                            <td>
+
+                                <form
+                                    method="POST"
+                                    action="{{ url_for(
+                                        'delete_teacher',
+                                        teacher_id=teacher.teacher_id
+                                    ) }}"
+                                    onsubmit="return confirm(
+                                        'Are you sure you want to delete this teacher?'
+                                    );">
+
+
+                                    <button
+                                        type="submit"
+                                        class="delete-btn">
+
+                                        Delete
+
+                                    </button>
+
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+
+                        {% else %}
+
+                        <tr>
+
+                            <td colspan="5">
+
+                                No teachers found.
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- =================================================
+             PARENTS
+        ================================================== -->
+
+        <section
+            id="parents"
+            class="admin-section">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>
+                        Parents
+                    </h2>
+
+                    <p>
+                        Add or remove parent accounts.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ADD PARENT -->
+
+            <form
+                method="POST"
+                action="{{ url_for('add_parent') }}"
+                class="admin-form">
+
+
+                <input
+                    type="text"
+                    name="full_name"
+                    placeholder="Full Name"
+                    required>
+
+
+                <input
+                    type="text"
+                    name="phone_number"
+                    placeholder="Phone Number"
+                    required>
+
+
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    required>
+
+
+                <select
+                    name="preferred_language"
+                    required>
+
+                    <option value="English">
+                        English
+                    </option>
+
+                    <option value="Hindi">
+                        Hindi
+                    </option>
+
+                    <option value="Odia">
+                        Odia
+                    </option>
+
+                </select>
+
+
+                <button
+                    type="submit"
+                    class="add-btn">
+
+                    + Add Parent
+
+                </button>
+
+
+            </form>
+
+
+            <!-- PARENT TABLE -->
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Full Name</th>
+
+                            <th>Phone</th>
+
+                            <th>Language</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for parent in parents %}
+
+                        <tr>
+
+                            <td>
+                                {{ parent.parent_id }}
+                            </td>
+
+                            <td>
+                                {{ parent.full_name }}
+                            </td>
+
+                            <td>
+                                {{ parent.phone_number }}
+                            </td>
+
+                            <td>
+                                {{ parent.preferred_language }}
+                            </td>
+
+                            <td>
+
+                                <form
+                                    method="POST"
+                                    action="{{ url_for(
+                                        'delete_parent',
+                                        parent_id=parent.parent_id
+                                    ) }}"
+                                    onsubmit="return confirm(
+                                        'Deleting this parent will also remove linked student records. Continue?'
+                                    );">
+
+
+                                    <button
+                                        type="submit"
+                                        class="delete-btn">
+
+                                        Delete
+
+                                    </button>
+
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+
+                        {% else %}
+
+                        <tr>
+
+                            <td colspan="5">
+
+                                No parents found.
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- =================================================
+             STUDENTS
+        ================================================== -->
+
+        <section
+            id="students"
+            class="admin-section">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>
+                        Students
+                    </h2>
+
+                    <p>
+                        Add or remove student records.
+                    </p>
+
+                </div>
+
+
+            <!-- ADD STUDENT -->
+
+            <form
+                method="POST"
+                action="{{ url_for('add_student') }}"
+                class="admin-form">
+
+
+                <input
+                    type="text"
+                    name="student_name"
+                    placeholder="Student Name"
+                    required>
+
+
+                <input
+                    type="text"
+                    name="roll_number"
+                    placeholder="Roll Number"
+                    required>
+
+
+                <input
+                    type="text"
+                    name="class"
+                    placeholder="Class"
+                    value="{{ project_class }}"
+                    required>
+
+
+                <select
+                    name="parent_id"
+                    required>
+
+                    <option value="">
+                        Select Parent
+                    </option>
+
+                    {% for parent in parents %}
+
+                    <option value="{{ parent.parent_id }}">
+                        {{ parent.full_name }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+                <button
+                    type="submit"
+                    class="add-btn">
+
+                    + Add Student
+
+                </button>
+
+
+            </form>
+
+
+            </div>
+
+
+            <!-- STUDENT TABLE -->
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Student Name</th>
+
+                            <th>Roll No.</th>
+
+                            <th>Class</th>
+
+                            <th>Parent</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for student in students %}
+
+                        <tr>
+
+                            <td>
+                                {{ student.student_id }}
+                            </td>
+
+                            <td>
+                                {{ student.student_name }}
+                            </td>
+
+                            <td>
+                                {{ student.roll_number }}
+                            </td>
+
+                            <td>
+                                {{ student.class }}
+                            </td>
+
+                            <td>
+                                {{ student.parent_name or "Not Assigned" }}
+                            </td>
+
+                            <td>
+
+                                <form
+                                    method="POST"
+                                    action="{{ url_for(
+                                        'delete_student',
+                                        student_id=student.student_id
+                                    ) }}"
+                                    onsubmit="return confirm(
+                                        'Are you sure you want to delete this student?'
+                                    );">
+
+
+                                    <button
+                                        type="submit"
+                                        class="delete-btn">
+
+                                        Delete
+
+                                    </button>
+
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+
+                        {% else %}
+
+                        <tr>
+
+                            <td colspan="6">
+
+                                No students found.
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- =================================================
+             GOVERNMENT SCHEMES
+        ================================================== -->
+
+        <section
+            id="schemes"
+            class="admin-section">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>
+                        Government Schemes
+                    </h2>
+
+                    <p>
+                        Add or remove government schemes.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="{{ url_for('add_scheme') }}"
+                    class="add-btn">
+
+                    + Add Scheme
+
+                </a>
+
+
+            </div>
+
+
+            <!-- SCHEME TABLE -->
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Scheme Name</th>
+
+                            <th>Eligible Class</th>
+
+                            <th>Deadline</th>
+
+                            <th>Documents</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for scheme in schemes %}
+
+                        <tr>
+
+                            <td>
+                                {{ scheme.scheme_id }}
+                            </td>
+
+                            <td>
+                                {{ scheme.scheme_name }}
+                            </td>
+
+                            <td>
+                                {{ scheme.eligible_class }}
+                            </td>
+
+                            <td>
+                                {{ scheme.deadline }}
+                            </td>
+
+                            <td>
+                                {{ scheme.documents_required }}
+                            </td>
+
+                            <td>
+
+                                <form
+                                    method="POST"
+                                    action="{{ url_for(
+                                        'delete_scheme',
+                                        scheme_id=scheme.scheme_id
+                                    ) }}"
+                                    onsubmit="return confirm(
+                                        'Are you sure you want to delete this scheme?'
+                                    );">
+
+
+                                    <button
+                                        type="submit"
+                                        class="delete-btn">
+
+                                        Delete
+
+                                    </button>
+
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+
+                        {% else %}
+
+                        <tr>
+
+                            <td colspan="6">
+
+                                No schemes found.
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+
+</body>
+
+</html>

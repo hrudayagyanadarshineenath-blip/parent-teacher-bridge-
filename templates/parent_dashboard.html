@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Parent Dashboard | Parent Teacher Bridge</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        /* =========================================================
+           PARENT DASHBOARD
+           ========================================================= */
+
+        .parent-dashboard {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        .dashboard-header {
+            background: white;
+            border-radius: 18px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .dashboard-header h1 {
+            margin: 0 0 8px;
+            font-size: 32px;
+        }
+
+        .dashboard-header p {
+            margin: 0;
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        .parent-section {
+            margin-bottom: 25px;
+        }
+
+        .parent-section h2 {
+            margin-bottom: 15px;
+            font-size: 24px;
+            color: #0f172a;
+        }
+
+        /* =========================================================
+           DETAILS CARD
+           ========================================================= */
+
+        .student-details-card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            flex-wrap: wrap;
+        }
+
+        .student-avatar {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            background: #eff6ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+        }
+
+        .student-information {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .student-information h3 {
+            margin: 0 0 10px;
+            font-size: 22px;
+            color: #0f172a;
+        }
+
+        .student-information p {
+            margin: 6px 0;
+            color: #475569;
+        }
+
+        /* =========================================================
+           ATTENDANCE PROGRESS
+           ========================================================= */
+
+        .attendance-progress {
+            width: 260px;
+            min-width: 220px;
+        }
+
+        .attendance-progress span {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-value {
+            height: 100%;
+            background: #2563eb;
+            border-radius: 10px;
+        }
+
+        /* =========================================================
+           QUICK ACCESS
+           ========================================================= */
+
+        .parent-quick-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .parent-action-card {
+            display: block;
+            text-decoration: none;
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            color: #0f172a;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .parent-action-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .action-icon {
+            font-size: 35px;
+            margin-bottom: 10px;
+        }
+
+        .parent-action-card h3 {
+            margin: 5px 0 8px;
+        }
+
+        .parent-action-card p {
+            margin: 0;
+            color: #64748b;
+        }
+
+        /* =========================================================
+           TABLE
+           ========================================================= */
+
+        .table-container {
+            background: white;
+            border-radius: 18px;
+            padding: 20px;
+            overflow-x: auto;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .table-container table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-container th,
+        .table-container td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .table-container th {
+            background: #f8fafc;
+            color: #334155;
+            font-weight: 600;
+        }
+
+        .table-container td {
+            color: #475569;
+        }
+
+        /* =========================================================
+           TEACHER CONNECTION BUTTON
+           ========================================================= */
+
+        .teacher-contact {
+            display: inline-block;
+            text-decoration: none;
+            background: #2563eb;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: background 0.2s ease;
+        }
+
+        .teacher-contact:hover {
+            background: #1d4ed8;
+            color: white;
+        }
+
+        /* =========================================================
+           RECENT UPDATES
+           ========================================================= */
+
+        .updates-container {
+            display: grid;
+            gap: 15px;
+        }
+
+        .update-item {
+            background: white;
+            border-radius: 15px;
+            padding: 18px;
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .update-icon {
+            font-size: 28px;
+        }
+
+        .update-content h3 {
+            margin: 0 0 5px;
+            font-size: 18px;
+            color: #0f172a;
+        }
+
+        .update-content p {
+            margin: 0;
+            color: #64748b;
+        }
+
+        /* =========================================================
+           FOOTER
+           ========================================================= */
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        /* =========================================================
+           MOBILE RESPONSIVE
+           ========================================================= */
+
+        @media (max-width: 768px) {
+
+            .parent-dashboard {
+                padding: 15px;
+            }
+
+            .dashboard-header {
+                padding: 22px;
+            }
+
+            .dashboard-header h1 {
+                font-size: 26px;
+            }
+
+            .parent-section h2 {
+                font-size: 21px;
+            }
+
+            .parent-quick-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .student-details-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .attendance-progress {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+
+<body class="page-bg">
+
+    <!-- =========================================================
+         SETTINGS BUTTON
+         ========================================================= -->
+
+    <button class="settings-button"
+            onclick="toggleParentSidebar()"
+            title="Open Settings">
+        ⚙️
+    </button>
+
+
+    <!-- =========================================================
+         PARENT SIDEBAR
+         ========================================================= -->
+
+    <aside id="parentSidebar"
+           class="dashboard-sidebar">
+
+        <div class="sidebar-header">
+
+            <h2>👨‍👩‍👦 Parent Panel</h2>
+
+            <button class="close-sidebar"
+                    onclick="toggleParentSidebar()">
+                ✕
+            </button>
+
+        </div>
+
+        <nav>
+
+            <a href="{{ url_for('parent_dashboard') }}">
+                🏠 Dashboard
+            </a>
+
+            <a href="{{ url_for('schemes') }}">
+                🎁 Schemes
+            </a>
+
+            <a href="{{ url_for('voicemail') }}">
+                🎤 Voice Message
+            </a>
+
+            <a href="{{ url_for('logout') }}">
+                🚪 Logout
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- =========================================================
+         MAIN DASHBOARD
+         ========================================================= -->
+
+    <main class="parent-dashboard">
+
+
+        <!-- =====================================================
+             HEADER
+             ===================================================== -->
+
+        <header class="dashboard-header">
+
+            <h1>
+                Parent Dashboard 👋
+            </h1>
+
+            <p>
+                Stay connected with your child's education
+                and school activities.
+            </p>
+
+        </header>
+
+
+        <!-- =====================================================
+             PARENT DETAILS
+             ===================================================== -->
+
+        <section class="parent-section">
+
+            <h2>
+                👤 Parent Details
+            </h2>
+
+            {% if parent %}
+
+            <div class="student-details-card">
+
+                <div class="student-avatar">
+                    👨‍👩‍👦
+                </div>
+
+                <div class="student-information">
+
+                    <h3>
+                        {{ parent.full_name }}
+                    </h3>
+
+                    <p>
+                        <strong>Phone:</strong>
+                        {{ parent.phone_number }}
+                    </p>
+
+                    <p>
+                        <strong>Preferred Language:</strong>
+                        {{ parent.preferred_language }}
+                    </p>
+
+                    <p>
+                        <strong>Parent ID:</strong>
+                        {{ parent.parent_id }}
+                    </p>
+
+                </div>
+
+            </div>
+
+            {% else %}
+
+            <div class="student-details-card">
+
+                <div class="student-information">
+
+                    <h3>
+                        Parent Details Not Found
+                    </h3>
+
+                    <p>
+                        Unable to load parent information.
+                    </p>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- =====================================================
+             STUDENT DETAILS
+             ===================================================== -->
+
+        <section class="parent-section">
+
+            <h2>
+                👨‍🎓 Student Details
+            </h2>
+
+            {% if student %}
+
+            <div class="student-details-card">
+
+                <div class="student-avatar">
+                    👦
+                </div>
+
+                <div class="student-information">
+
+                    <h3>
+                        {{ student.student_name }}
+                    </h3>
+
+                    <p>
+                        <strong>Roll No:</strong>
+                        {{ student.roll_number }}
+                    </p>
+
+                    <p>
+                        <strong>Class:</strong>
+                        {{ student.class }}
+                    </p>
+
+                </div>
+
+                <div class="attendance-progress">
+
+                    <span>
+                        Attendance
+                    </span>
+
+                    <div class="progress-bar">
+
+                        <div class="progress-value"
+                             style="width: {{ attendance_percentage }}%;">
+                        </div>
+
+                    </div>
+
+                    <strong>
+                        {{ attendance_percentage }}%
+                    </strong>
+
+                </div>
+
+            </div>
+
+            {% else %}
+
+            <div class="student-details-card">
+
+                <div class="student-information">
+
+                    <h3>
+                        No Student Linked
+                    </h3>
+
+                    <p>
+                        No student is currently linked
+                        to this parent account.
+                    </p>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- =====================================================
+             TEACHER CONNECTION
+             ===================================================== -->
+
+        <section class="parent-section">
+
+            <h2>
+                👨‍🏫 Teacher Connection
+            </h2>
+
+            {% if teacher %}
+
+            <div class="student-details-card">
+
+                <div class="student-avatar">
+                    👨‍🏫
+                </div>
+
+                <div class="student-information">
+
+                    <h3>
+                        {{ teacher.full_name }}
+                    </h3>
+
+                    <p>
+                        <strong>Username:</strong>
+                        {{ teacher.username }}
+                    </p>
+
+                    <p>
+                        <strong>Class Assigned:</strong>
+                        {{ teacher.class_assigned }}
+                    </p>
+
+                </div>
+
+                <div>
+
+                    <a href="{{ url_for('voicemail') }}"
+                       class="teacher-contact">
+                        🎤 Contact Teacher
+                    </a>
+
+                </div>
+
+            </div>
+
+            {% else %}
+
+            <div class="student-details-card">
+
+                <div class="student-information">
+
+                    <h3>
+                        No Teacher Connected
+                    </h3>
+
+                    <p>
+                        No teacher is assigned to
+                        this student's class yet.
+                    </p>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- =====================================================
+             QUICK ACCESS
+             ===================================================== -->
+
+        <section class="parent-section">
+
+            <h2>
+                ⚡ Quick Access
+            </h2>
+
+            <div class="parent-quick-grid">
+
+
+                <!-- SCHEMES -->
+
+                <a href="{{ url_for('schemes') }}"
+                   class="parent-action-card">
+
+                    <div class="action-icon">
+                        🎁
+                    </div>
+
+                    <h3>
+                        Scheme Checker
+                    </h3>
+
+                    <p>
+                        Check government schemes
+                        and scholarship eligibility.
+                    </p>
+
+                </a>
+
+
+                <!-- VOICE MESSAGE -->
+
+                <a href="{{ url_for('parent_voicemail') }}"
+                   class="parent-action-card">
+
+                    <div class="action-icon">
+                        🎤
+                    </div>
+
+                    <h3>
+                        Voice Mail
+                    </h3>
+
+                    <p>
+                        Communicate with teachers
+                        through voice messages.
+                    </p>
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             ATTENDANCE ANALYSIS
+             ===================================================== -->
+
+        <section class="parent-section">
+
+            <h2>
+                📅 Attendance Analysis
+            </h2>
+
+            {% if student %}
+
+            <div class="student-details-card">
+
+                <div class="student-information">
+
+                    <h3>
+                        {{ student.student_name }}
+                    </h3>
+
+                    <p>
+                        <strong>Total Days:</strong>
+                        {{ total_attendance_days }}
+                    </p>
+
+                    <p>
+                        <strong>Present:</strong>
+                        {{ present_days }}
+                    </p>
+
+                    <p>
+                        <strong>Absent:</strong>
+                        {{ absent_days }}
+                    </p>
+
+                </div>
+
+                <div class="attendance-progress">
+
+                    <span>
+                        Attendance Percentage
+                    </span>
+
+                    <div class="progress-bar">
+
+                        <div class="progress-value"
+                             style="width: {{ attendance_percentage }}%;">
+                        </div>
+
+                    </div>
+
+                    <strong>
+                        {{ attendance_percentage }}%
+                    </strong>
+
+                </div>
+
+            </div>
+
+            {% else %}
+
+            <div class="student-details-card">
+
+                <p>
+                    Attendance analysis will appear
+                    after a student is linked
+                    to this parent.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- =====================================================
+             ATTENDANCE RECORDS
+             ===================================================== -->
+
+        <section class="parent-section">
+
+            <h2>
+                📋 Attendance Records
+            </h2>
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for attendance in attendance_records %}
+
+                        <tr>
+
+                            <td>
+                                {{ attendance.attendance_date }}
+                            </td>
+
+                            <td>
+                                {{ attendance.status }}
+                            </td>
+
+                        </tr>
+
+                        {% else %}
+
+                        <tr>
+
+                            <td colspan="2">
+                                No attendance records found
+                                for this student.
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             ACADEMIC PERFORMANCE
+             ===================================================== -->
+
+        <section class="parent-section">
+
+            <h2>
+                📊 Academic Performance Analysis
+            </h2>
+
+            {% if student %}
+
+            <div class="student-details-card">
+
+                <div class="student-information">
+
+                    <h3>
+                        {{ student.student_name }}
+                    </h3>
+
+                    <p>
+                        <strong>Total Marks:</strong>
+                        {{ total_marks }}
+                    </p>
+
+                    <p>
+                        <strong>Average Marks:</strong>
+                        {{ average_marks }}
+                    </p>
+
+                    <p>
+                        <strong>Performance:</strong>
+                        {{ marks_percentage }}%
+                    </p>
+
+                </div>
+
+            </div>
+
+            {% else %}
+
+            <div class="student-details-card">
+
+                <p>
+                    Academic analysis will appear
+                    after a student is linked
+                    to this parent.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- =====================================================
+             ACADEMIC MARKS
+             ===================================================== -->
+
+        <section class="parent-section">
+
+            <h2>
+                📘 Academic Marks
+            </h2>
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Subject
+                            </th>
+
+                            <th>
+                                Marks Obtained
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for mark in marks_records %}
+
+                        <tr>
+
+                            <td>
+                                {{ mark.subject }}
+                            </td>
+
+                            <td>
+                                {{ mark.marks_obtained }}
+                            </td>
+
+                        </tr>
+
+                        {% else %}
+
+                        <tr>
+
+                            <td colspan="2">
+                                No marks records found
+                                for this student.
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             RECENT UPDATES
+             ===================================================== -->
+
+        <section class="parent-section">
+
+            <h2>
+                🔔 Recent Updates
+            </h2>
+
+            <div class="updates-container">
+
+                {% for update in updates %}
+
+                <div class="update-item">
+
+                    <div class="update-icon">
+                        {{ update.icon }}
+                    </div>
+
+                    <div class="update-content">
+
+                        <h3>
+                            {{ update.title }}
+                        </h3>
+
+                        <p>
+                            {{ update.text }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             FOOTER
+             ===================================================== -->
+
+        <footer>
+
+            <p>
+                © 2026 Parent Teacher Bridge |
+                Developed as a Minor Project |
+                Ravenshaw University
+            </p>
+
+        </footer>
+
+    </main>
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+         ========================================================= -->
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+
+</html>

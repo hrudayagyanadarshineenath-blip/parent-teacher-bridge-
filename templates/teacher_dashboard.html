@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Teacher Dashboard | Parent Teacher Bridge</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        /* =========================================================
+       TEACHER DASHBOARD
+       MODERN BROWN + GOLD + CREAM THEME
+       ========================================================= */
+
+        .teacher-dashboard {
+
+            min-height: 100vh;
+
+            background:
+                linear-gradient(180deg,
+                    #fffdf8 0%,
+                    #f7eee1 100%);
+
+            color: #5f4c3c;
+        }
+
+
+        /* =========================================================
+       TOP BAR
+       ========================================================= */
+
+        .teacher-topbar {
+
+            background:
+                linear-gradient(135deg,
+                    #3b2416,
+                    #5a3a22);
+
+            color: #fffaf0;
+
+            padding:
+                14px 25px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 18px;
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+
+            box-shadow:
+                0 5px 18px rgba(59, 36, 22, 0.20);
+        }
+
+        .teacher-topbar h2 {
+
+            margin: 0;
+
+            color: #fffaf0;
+
+            font-size: 21px;
+
+            font-weight: 750;
+        }
+
+
+        /* =========================================================
+       SETTINGS BUTTON
+       ========================================================= */
+
+        .settings-btn {
+
+            width: 45px;
+            height: 45px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border: none;
+
+            border-radius: 11px;
+
+            background:
+                linear-gradient(135deg,
+                    #b7791f,
+                    #d4a017);
+
+            color: #3b2416;
+
+            font-size: 21px;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 6px 15px rgba(212, 160, 23, 0.25);
+
+            transition:
+                0.25s ease;
+        }
+
+        .settings-btn:hover {
+
+            transform:
+                rotate(12deg) scale(1.04);
+
+            background:
+                linear-gradient(135deg,
+                    #e8c766,
+                    #d4a017);
+        }
+
+
+        /* =========================================================
+       SIDE MENU
+       ========================================================= */
+
+        .teacher-sidebar {
+
+            position: fixed;
+
+            top: 0;
+            left: -290px;
+
+            width: 290px;
+            height: 100vh;
+
+            padding:
+                80px 22px 30px;
+
+            background:
+                linear-gradient(180deg,
+                    #3b2416,
+                    #4d2f1c);
+
+            color: #fffaf0;
+
+            z-index: 2000;
+
+            transition:
+                left 0.30s ease;
+
+            box-shadow:
+                8px 0 30px rgba(45, 25, 13, 0.25);
+
+            overflow-y: auto;
+        }
+
+        .teacher-sidebar.active {
+            left: 0;
+        }
+
+        .teacher-sidebar h3 {
+
+            margin-bottom: 27px;
+
+            color:
+                #f8e8b8;
+
+            font-size: 21px;
+
+            font-weight: 750;
+        }
+
+        .teacher-sidebar a {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            color:
+                #eadcc8;
+
+            text-decoration: none;
+
+            padding:
+                13px 15px;
+
+            margin-bottom:
+                7px;
+
+            border-radius:
+                10px;
+
+            font-size:
+                13px;
+
+            font-weight:
+                600;
+
+            transition:
+                0.25s ease;
+        }
+
+        .teacher-sidebar a:hover {
+
+            background:
+                rgba(212, 160, 23, 0.18);
+
+            color:
+                #fffaf0;
+
+            transform:
+                translateX(4px);
+        }
+
+
+        /* =========================================================
+       CLOSE BUTTON
+       ========================================================= */
+
+        .teacher-sidebar .close-sidebar {
+
+            position:
+                absolute;
+
+            top:
+                18px;
+
+            right:
+                18px;
+
+            width:
+                37px;
+
+            height:
+                37px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            padding:
+                0;
+
+            background:
+                rgba(255, 255, 255, 0.08);
+
+            border:
+                none;
+
+            border-radius:
+                9px;
+
+            color:
+                #fffaf0;
+
+            font-size:
+                22px;
+
+            cursor:
+                pointer;
+
+            transition:
+                0.25s ease;
+        }
+
+        .teacher-sidebar .close-sidebar:hover {
+
+            background:
+                #c53030;
+
+            transform:
+                rotate(5deg);
+        }
+
+
+        /* =========================================================
+       MAIN CONTENT
+       ========================================================= */
+
+        .teacher-main {
+
+            padding:
+                38px 35px 55px;
+
+            max-width:
+                1400px;
+
+            margin:
+                auto;
+        }
+
+
+        /* =========================================================
+       WELCOME SECTION
+       ========================================================= */
+
+        .welcome-section {
+
+            position:
+                relative;
+
+            overflow:
+                hidden;
+
+            background:
+                linear-gradient(135deg,
+                    #5a3a22,
+                    #8b5e34,
+                    #b7791f);
+
+            color:
+                #fffaf0;
+
+            padding:
+                35px;
+
+            border-radius:
+                21px;
+
+            margin-bottom:
+                27px;
+
+            box-shadow:
+                0 12px 30px rgba(91, 57, 31, 0.18);
+        }
+
+        .welcome-section::after {
+
+            content: "";
+
+            position:
+                absolute;
+
+            width:
+                230px;
+
+            height:
+                230px;
+
+            right:
+                -60px;
+
+            top:
+                -90px;
+
+            border-radius:
+                50%;
+
+            background:
+                rgba(255, 255, 255, 0.08);
+        }
+
+        .welcome-section h1 {
+
+            position:
+                relative;
+
+            z-index:
+                1;
+
+            color:
+                #fffaf0;
+
+            margin-bottom:
+                9px;
+
+            font-size:
+                28px;
+
+            font-weight:
+                800;
+        }
+
+        .welcome-section p {
+
+            position:
+                relative;
+
+            z-index:
+                1;
+
+            color:
+                #f7e8cf;
+
+            font-size:
+                13px;
+
+            max-width:
+                700px;
+        }
+
+
+        /* =========================================================
+       TEACHER PROFILE
+       ========================================================= */
+
+        .teacher-profile {
+
+            background:
+                #fffdf9;
+
+            padding:
+                25px;
+
+            border:
+                1px solid #eadfce;
+
+            border-radius:
+                18px;
+
+            margin-bottom:
+                27px;
+
+            box-shadow:
+                0 6px 18px rgba(73, 47, 26, 0.06);
+        }
+
+        .teacher-profile h2 {
+
+            margin-bottom:
+                19px;
+
+            color:
+                #422d1d;
+
+            font-size:
+                19px;
+        }
+
+
+        /* =========================================================
+       PROFILE GRID
+       ========================================================= */
+
+        .profile-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(auto-fit,
+                    minmax(220px, 1fr));
+
+            gap:
+                13px;
+        }
+
+        .profile-item {
+
+            padding:
+                15px;
+
+            background:
+                linear-gradient(135deg,
+                    #fffaf0,
+                    #f8eee0);
+
+            border:
+                1px solid #eadfce;
+
+            border-radius:
+                11px;
+
+            color:
+                #725f4e;
+
+            font-size:
+                12px;
+
+            transition:
+                0.25s ease;
+        }
+
+        .profile-item:hover {
+
+            transform:
+                translateY(-2px);
+
+            border-color:
+                #d9bd83;
+
+            box-shadow:
+                0 5px 14px rgba(73, 47, 26, 0.07);
+        }
+
+        .profile-item strong {
+
+            color:
+                #4b3220;
+        }
+
+
+        /* =========================================================
+       STATISTICS
+       ========================================================= */
+
+        .stats-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(auto-fit,
+                    minmax(200px, 1fr));
+
+            gap:
+                16px;
+
+            margin-bottom:
+                27px;
+        }
+
+        .stat-card {
+
+            position:
+                relative;
+
+            overflow:
+                hidden;
+
+            background:
+                #fffdf9;
+
+            padding:
+                24px;
+
+            border:
+                1px solid #eadfce;
+
+            border-radius:
+                17px;
+
+            text-align:
+                center;
+
+            box-shadow:
+                0 5px 16px rgba(73, 47, 26, 0.06);
+
+            transition:
+                0.25s ease;
+        }
+
+        .stat-card::before {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            top:
+                0;
+
+            left:
+                0;
+
+            width:
+                100%;
+
+            height:
+                4px;
+
+            background:
+                linear-gradient(90deg,
+                    #a66a2c,
+                    #d4a017);
+        }
+
+        .stat-card:hover {
+
+            transform:
+                translateY(-5px);
+
+            border-color:
+                #ddc393;
+
+            box-shadow:
+                0 12px 27px rgba(73, 47, 26, 0.11);
+        }
+
+        .stat-card h2 {
+
+            font-size:
+                31px;
+
+            color:
+                #a66a2c;
+
+            margin-bottom:
+                4px;
+
+            font-weight:
+                800;
+        }
+
+        .stat-card p {
+
+            color:
+                #8d7967;
+
+            font-size:
+                12px;
+        }
+
+
+        /* =========================================================
+       DASHBOARD SECTIONS
+       ========================================================= */
+
+        .dashboard-section {
+
+            background:
+                #fffdf9;
+
+            padding:
+                25px;
+
+            border:
+                1px solid #eadfce;
+
+            border-radius:
+                18px;
+
+            margin-bottom:
+                27px;
+
+            box-shadow:
+                0 6px 18px rgba(73, 47, 26, 0.06);
+        }
+
+        .dashboard-section h2 {
+
+            margin-bottom:
+                19px;
+
+            color:
+                #422d1d;
+
+            font-size:
+                19px;
+        }
+
+
+        /* =========================================================
+       QUICK ACTIONS
+       ========================================================= */
+
+        /* =========================================================
+   QUICK ACTIONS
+   ========================================================= */
+
+        .quick-actions {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(auto-fit,
+                    minmax(210px, 1fr));
+
+            gap:
+                15px;
+        }
+
+
+        /* =========================================================
+   QUICK ACTION BUTTON
+   ========================================================= */
+
+        .action-btn {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            min-height:
+                70px;
+
+            padding:
+                20px 22px;
+
+            background:
+                linear-gradient(135deg,
+                    #a66a2c,
+                    #d4a017);
+
+            color:
+                #fffaf0;
+
+            text-decoration:
+                none;
+
+            border-radius:
+                14px;
+
+            font-size:
+                16px;
+
+            font-weight:
+                750;
+
+            box-shadow:
+                0 7px 18px rgba(166, 106, 44, 0.18);
+
+            transition:
+                0.25s ease;
+        }
+
+        .action-btn:hover {
+
+            transform:
+                translateY(-3px);
+
+            color:
+                #fffaf0;
+
+            background:
+                linear-gradient(135deg,
+                    #8f5c14,
+                    #c79522);
+
+            box-shadow:
+                0 10px 22px rgba(166, 106, 44, 0.22);
+        }
+
+
+        /* =========================================================
+       SCHEDULE
+       ========================================================= */
+
+        .schedule-item {
+
+            padding:
+                15px 16px;
+
+            border-left:
+                4px solid #d4a017;
+
+            background:
+                #fff8e8;
+
+            margin-bottom:
+                9px;
+
+            border-radius:
+                8px;
+
+            color:
+                #665143;
+
+            font-size:
+                12px;
+
+            border-top:
+                1px solid #f0e3ca;
+
+            border-right:
+                1px solid #f0e3ca;
+
+            border-bottom:
+                1px solid #f0e3ca;
+
+            transition:
+                0.25s ease;
+        }
+
+        .schedule-item:hover {
+
+            background:
+                #fff2ce;
+
+            transform:
+                translateX(3px);
+        }
+
+
+        /* =========================================================
+       PERFORMANCE
+       ========================================================= */
+
+        .performance-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(auto-fit,
+                    minmax(200px, 1fr));
+
+            gap:
+                15px;
+        }
+
+        .performance-card {
+
+            position:
+                relative;
+
+            background:
+                linear-gradient(135deg,
+                    #fffaf0,
+                    #f6eadb);
+
+            padding:
+                21px;
+
+            border:
+                1px solid #e9dccb;
+
+            border-radius:
+                14px;
+
+            color:
+                #715c49;
+
+            font-size:
+                12px;
+
+            transition:
+                0.25s ease;
+        }
+
+        .performance-card:hover {
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 9px 20px rgba(73, 47, 26, 0.08);
+        }
+
+        .performance-card h2 {
+
+            color:
+                #a46c16;
+
+            margin:
+                8px 0 4px;
+
+            font-size:
+                24px;
+        }
+
+        .performance-card p {
+
+            color:
+                #9a8877;
+
+            font-size:
+                11px;
+        }
+
+
+        /* =========================================================
+       STUDENT TABLE
+       ========================================================= */
+
+        .student-table {
+
+            width:
+                100%;
+
+            border-collapse:
+                collapse;
+
+            overflow:
+                hidden;
+
+            background:
+                #fffdf9;
+        }
+
+        .student-table th {
+
+            padding:
+                14px;
+
+            text-align:
+                center;
+
+            background:
+                #f1e2cb;
+
+            color:
+                #5a3a22;
+
+            border-bottom:
+                1px solid #dfcba9;
+
+            font-size:
+                11px;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                0.3px;
+        }
+
+        .student-table td {
+
+            padding:
+                13px 14px;
+
+            text-align:
+                center;
+
+            color:
+                #665548;
+
+            border-bottom:
+                1px solid #eee4d7;
+
+            font-size:
+                12px;
+        }
+
+        .student-table tbody tr {
+
+            transition:
+                0.20s ease;
+        }
+
+        .student-table tbody tr:hover {
+
+            background:
+                #fff8e9;
+        }
+
+        .student-table tbody tr:last-child td {
+            border-bottom:
+                none;
+        }
+
+
+        /* =========================================================
+       ANNOUNCEMENTS
+       ========================================================= */
+
+        .announcement {
+
+            padding:
+                14px 16px;
+
+            background:
+                #fff8e8;
+
+            border:
+                1px solid #eee0c8;
+
+            border-left:
+                4px solid #d4a017;
+
+            border-radius:
+                10px;
+
+            margin-bottom:
+                9px;
+
+            color:
+                #675445;
+
+            font-size:
+                12px;
+
+            transition:
+                0.25s ease;
+        }
+
+        .announcement:hover {
+
+            background:
+                #fff1cf;
+
+            transform:
+                translateX(3px);
+        }
+
+
+        /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+        @media (max-width: 900px) {
+
+            .teacher-main {
+                padding:
+                    30px 20px 45px;
+            }
+
+            .teacher-stats,
+            .stats-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 768px) {
+
+            .teacher-topbar {
+                padding:
+                    13px 17px;
+            }
+
+            .teacher-topbar h2 {
+                font-size:
+                    18px;
+            }
+
+            .teacher-main {
+                padding:
+                    23px 15px 40px;
+            }
+
+            .welcome-section {
+                padding:
+                    25px 20px;
+            }
+
+            .welcome-section h1 {
+                font-size:
+                    23px;
+            }
+
+            .teacher-profile,
+            .dashboard-section {
+                padding:
+                    20px 17px;
+            }
+
+            .stats-grid {
+                grid-template-columns:
+                    1fr 1fr;
+            }
+
+            .student-table {
+                font-size:
+                    11px;
+            }
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .settings-btn {
+
+                width:
+                    42px;
+
+                height:
+                    42px;
+            }
+
+            .teacher-topbar h2 {
+                font-size:
+                    16px;
+            }
+
+            .teacher-sidebar {
+                width:
+                    275px;
+            }
+
+            .stats-grid {
+                grid-template-columns:
+                    1fr;
+            }
+
+            .profile-grid {
+                grid-template-columns:
+                    1fr;
+            }
+
+            .quick-actions {
+                grid-template-columns:
+                    1fr;
+            }
+
+            .performance-grid {
+                grid-template-columns:
+                    1fr;
+            }
+
+            .student-table th,
+            .student-table td {
+                padding:
+                    10px 7px;
+
+                font-size:
+                    10px;
+            }
+
+        }
+
+
+        /* =========================================================
+       SMALL ANIMATION
+       ========================================================= */
+
+        .teacher-profile,
+        .stat-card,
+        .dashboard-section,
+        .welcome-section {
+
+            animation:
+                teacherFade 0.4s ease;
+        }
+
+        @keyframes teacherFade {
+
+            from {
+
+                opacity:
+                    0;
+
+                transform:
+                    translateY(8px);
+            }
+
+            to {
+
+                opacity:
+                    1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="teacher-dashboard">
+
+
+        <!-- =========================================
+         TOP BAR
+    ========================================== -->
+
+        <div class="teacher-topbar">
+
+            <button class="settings-btn" onclick="toggleTeacherSidebar()">
+
+                ⚙️
+
+            </button>
+
+            <h2>
+                👩‍🏫 Teacher Dashboard
+            </h2>
+
+        </div>
+
+
+        <!-- =========================================
+         SIDE MENU
+    ========================================== -->
+
+        <aside id="teacherSidebar" class="teacher-sidebar">
+
+            <button class="close-sidebar" onclick="toggleTeacherSidebar()">
+
+                ×
+
+            </button>
+
+            <h3>
+                👩‍🏫 Teacher Panel
+            </h3>
+
+            <a href="/teacher">
+                🏠 Dashboard
+            </a>
+
+            <a href="/attendance">
+                📅 Attendance
+            </a>
+
+            <a href="/marks">
+                📊 Marks Analysis
+            </a>
+
+            <a href="/schemes">
+                🎁 Schemes
+            </a>
+
+            <a href="/voicemail">
+                🎤 Voice Message
+            </a>
+
+            <a href="/">
+                🚪 Logout
+            </a>
+
+        </aside>
+
+
+        <!-- =========================================
+         MAIN DASHBOARD
+    ========================================== -->
+
+        <main class="teacher-main">
+
+
+            <!-- WELCOME -->
+
+            <section class="welcome-section">
+
+                <h1>
+                    Welcome, Mrs. Priya Sharma 👋
+                </h1>
+
+                <p>
+                    Manage attendance, marks, communication
+                    and student performance from one place.
+                </p>
+
+            </section>
+
+
+            <!-- =====================================
+             TEACHER PROFILE
+        ====================================== -->
+
+            <section class="teacher-profile">
+
+                <h2>
+                    👩‍🏫 Teacher Profile
+                </h2>
+
+                <div class="profile-grid">
+
+                    <div class="profile-item">
+                        <strong>Name:</strong>
+                        Mrs. Priya Sharma
+                    </div>
+
+                    <div class="profile-item">
+                        <strong>Teacher ID:</strong>
+                        TCH-1023
+                    </div>
+
+                    <div class="profile-item">
+                        <strong>Subject:</strong>
+                        Mathematics
+                    </div>
+
+                    <div class="profile-item">
+                        <strong>Class:</strong>
+                        VIII-A
+                    </div>
+
+                    <div class="profile-item">
+                        <strong>Experience:</strong>
+                        7 Years
+                    </div>
+
+                    <div class="profile-item">
+                        <strong>Email:</strong>
+                        priyasharma@gmail.com
+                    </div>
+
+                    <div class="profile-item">
+                        <strong>Phone:</strong>
+                        +91 XXXXX XXXXX
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================
+             STATISTICS
+        ====================================== -->
+
+            <section class="stats-grid">
+
+                <div class="stat-card">
+
+                    <h2>10</h2>
+
+                    <p>
+                        Total Students
+                    </p>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <h2>10</h2>
+
+                    <p>
+                        Present Today
+                    </p>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <h2>00</h2>
+
+                    <p>
+                        Absent Today
+                    </p>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <h2>98%</h2>
+
+                    <p>
+                        Class Performance
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================
+             QUICK ACTIONS
+        ====================================== -->
+
+            <section class="dashboard-section">
+
+                <h2>
+                    ⚡ Quick Actions
+                </h2>
+
+                <div class="quick-actions">
+
+                    <a href="/attendance" class="action-btn">
+
+                        📅 Mark Attendance
+
+                    </a>
+
+                    <a href="/marks" class="action-btn">
+
+                        📊 Upload Marks
+
+                    </a>
+
+                    <a href="/voicemail" class="action-btn">
+
+                        🎤 Voice Message
+
+                    </a>
+
+                    <a href="#" class="action-btn" onclick="showMessage('Homework section coming next.')">
+
+                        📚 Upload Homework
+
+                    </a>
+
+                    <a href="#" class="action-btn" onclick="showMessage('Notice section coming next.')">
+
+                        📢 Send Notice
+
+                    </a>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================
+             TODAY'S SCHEDULE
+        ====================================== -->
+
+            <section class="dashboard-section">
+
+                <h2>
+                    🕘 Today's Schedule
+                </h2>
+
+                <div class="schedule-item">
+                    🕘 09:00 AM —
+                    Class VIII-A Mathematics
+                </div>
+
+                <div class="schedule-item">
+                    🕙 10:30 AM —
+                    Class VII-B Mathematics
+                </div>
+
+                <div class="schedule-item">
+                    🕛 12:00 PM —
+                    Staff Meeting
+                </div>
+
+                <div class="schedule-item">
+                    🕒 03:00 PM —
+                    Parent Meeting
+                </div>
+
+            </section>
+
+
+            <!-- =====================================
+             STUDENT PERFORMANCE
+        ====================================== -->
+
+            <section class="dashboard-section">
+
+                <h2>
+                    📈 Student Performance
+                </h2>
+
+                <div class="performance-grid">
+
+                    <div class="performance-card">
+
+                        ⭐ Average Class Score
+
+                        <h2>86%</h2>
+
+                    </div>
+
+                    <div class="performance-card">
+
+                        🏆 Top Student
+
+                        <h2>Rahul Kumar</h2>
+
+                        <p>
+                            Score: 97%
+                        </p>
+
+                    </div>
+
+                    <div class="performance-card">
+
+                        📉 Students Needing Support
+
+                        <h2>5</h2>
+
+                    </div>
+
+                    <div class="performance-card">
+
+                        📈 Attendance Rate
+
+                        <h2>94%</h2>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================
+             RECENT STUDENTS
+        ====================================== -->
+
+            <section class="dashboard-section">
+
+                <h2>
+                    👨‍🎓 Recent Students
+                </h2>
+
+                <div style="overflow-x:auto;">
+
+                    <table class="student-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>ID</th>
+
+                                <th>Name</th>
+
+                                <th>Attendance</th>
+
+                                <th>Grade</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <td>101</td>
+                                <td>Rahul Kumar</td>
+                                <td>96%</td>
+                                <td>A+</td>
+                            </tr>
+
+                            <tr>
+                                <td>102</td>
+                                <td>Priya Das</td>
+                                <td>93%</td>
+                                <td>A</td>
+                            </tr>
+
+                            <tr>
+                                <td>103</td>
+                                <td>Rohan Mishra</td>
+                                <td>88%</td>
+                                <td>B+</td>
+                            </tr>
+
+                            <tr>
+                                <td>104</td>
+                                <td>Anjali Sahoo</td>
+                                <td>98%</td>
+                                <td>A+</td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================
+             ANNOUNCEMENTS
+        ====================================== -->
+
+            <section class="dashboard-section">
+
+                <h2>
+                    📢 Latest Announcements
+                </h2>
+
+                <div class="announcement">
+                    📢 Homework submission deadline is Friday.
+                </div>
+
+                <div class="announcement">
+                    📢 Parent Teacher Meeting on Monday.
+                </div>
+
+                <div class="announcement">
+                    📢 Government Scholarship list updated.
+                </div>
+
+                <div class="announcement">
+                    📢 Unit Test begins from next week.
+                </div>
+
+            </section>
+
+
+        </main>
+
+    </div>
+
+
+    <!-- =========================================
+     JAVASCRIPT
+========================================== -->
+
+    <script>
+
+        function toggleTeacherSidebar() {
+
+            const sidebar =
+                document.getElementById("teacherSidebar");
+
+            sidebar.classList.toggle("active");
+
+        }
+
+
+        function showMessage(message) {
+
+            alert(message);
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>

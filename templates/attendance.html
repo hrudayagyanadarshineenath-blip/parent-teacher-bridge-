@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Attendance Management</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body class="page-bg">
+
+
+<div class="page-content">
+
+
+    <div class="attendance-page">
+
+
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
+
+        <div class="attendance-header">
+
+            <div class="attendance-title-icon">
+                📋
+            </div>
+
+            <div>
+
+                <h1>
+                    Attendance Management
+                </h1>
+
+                <p>
+                    Mark and manage student attendance.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             ATTENDANCE FORM
+        ====================================================== -->
+
+        <form
+            method="POST"
+            action="{{ url_for('attendance') }}"
+        >
+
+
+            <!-- =================================================
+                 SUMMARY CARDS
+            ================================================== -->
+
+            <div class="attendance-summary">
+
+
+                <!-- TOTAL STUDENTS -->
+
+                <div class="attendance-summary-card">
+
+                    <div class="summary-icon total-icon">
+                        👥
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Total Students
+                        </span>
+
+                        <strong id="totalStudents">
+                            {{ total_students }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PRESENT -->
+
+                <div class="attendance-summary-card">
+
+                    <div class="summary-icon present-icon">
+                        ✓
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Present
+                        </span>
+
+                        <strong id="presentCount">
+                            {{ present_count }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ABSENT -->
+
+                <div class="attendance-summary-card">
+
+                    <div class="summary-icon absent-icon">
+                        ✕
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Absent
+                        </span>
+
+                        <strong id="absentCount">
+                            {{ absent_count }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PERCENTAGE -->
+
+                <div class="attendance-summary-card">
+
+                    <div class="summary-icon percentage-icon">
+                        %
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Attendance
+                        </span>
+
+                        <strong id="attendancePercentage">
+                            {{ attendance_percentage }}%
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ATTENDANCE CARD
+            ================================================== -->
+
+            <div class="attendance-card">
+
+
+                <!-- CARD HEADER -->
+
+                <div class="attendance-card-header">
+
+                    <div>
+
+                        <h2>
+                            Attendance
+                        </h2>
+
+                        <p>
+                            Select Present or Absent
+                            for each student.
+                        </p>
+
+                    </div>
+
+
+                    <!-- DATE -->
+
+                    <div class="attendance-date">
+
+                        📅
+
+                        <input
+                            type="date"
+                            name="attendance_date"
+                            value="{{ selected_date }}"
+                            required
+                            style="
+                                border:none;
+                                background:transparent;
+                                font:inherit;
+                                color:inherit;
+                                outline:none;
+                            "
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     STUDENT LIST
+                ================================================== -->
+
+                <div class="student-attendance-list">
+
+
+                    {% for student in students %}
+
+
+                    <div class="student-attendance-row">
+
+
+                        <!-- ROLL -->
+
+                        <div class="student-roll">
+
+                            {{ "%02d"|format(loop.index) }}
+
+                        </div>
+
+
+                        <!-- AVATAR -->
+
+                        <div class="student-avatar">
+
+                            {{ student.student_name[:2]|upper }}
+
+                        </div>
+
+
+                        <!-- INFORMATION -->
+
+                        <div class="student-information">
+
+                            <h3>
+
+                                {{ student.student_name }}
+
+                            </h3>
+
+                            <span>
+
+                                Roll No.
+                                {{ student.roll_number }}
+
+                                {% if student.class %}
+
+                                • Class
+                                {{ student.class }}
+
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- ATTENDANCE BUTTONS -->
+
+                        <div class="attendance-buttons">
+
+
+                            <!-- PRESENT -->
+
+                            <button
+                                type="button"
+                                class="attendance-status-btn present
+                                {% if student.attendance_status == 'Present' %}
+                                selected
+                                {% endif %}"
+                                data-student-id="{{ student.student_id }}"
+                                data-status="Present"
+                                onclick="selectAttendance(
+                                    this,
+                                    '{{ student.student_id }}',
+                                    'Present'
+                                )"
+                            >
+
+                                ✓ Present
+
+                            </button>
+
+
+                            <!-- ABSENT -->
+
+                            <button
+                                type="button"
+                                class="attendance-status-btn absent
+                                {% if student.attendance_status == 'Absent' %}
+                                selected
+                                {% endif %}"
+                                data-student-id="{{ student.student_id }}"
+                                data-status="Absent"
+                                onclick="selectAttendance(
+                                    this,
+                                    '{{ student.student_id }}',
+                                    'Absent'
+                                )"
+                            >
+
+                                ✕ Absent
+
+                            </button>
+
+
+                            <!-- HIDDEN VALUE -->
+
+                            <input
+                                type="hidden"
+                                id="status_{{ student.student_id }}"
+                                name="status_{{ student.student_id }}"
+                                value="{{ student.attendance_status }}"
+                            >
+
+
+                        </div>
+
+                    </div>
+
+
+                    {% else %}
+
+
+                    <div class="student-attendance-row">
+
+                        <div class="student-information">
+
+                            <h3>
+                                No students found
+                            </h3>
+
+                            <span>
+                                Add students from the Admin Dashboard first.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- =================================================
+                     ACTIONS
+                ================================================== -->
+
+                <div class="attendance-actions">
+
+
+                    <button
+                        type="button"
+                        class="attendance-back-btn"
+                        onclick="history.back()"
+                    >
+
+                        ← Back
+
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="attendance-save-btn"
+                    >
+
+                        ✓ Save Attendance
+
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+
+</div>
+
+
+<!-- =========================================================
+     PAGE JAVASCRIPT
+========================================================= -->
+
+<script>
+
+    function selectAttendance(
+        button,
+        studentId,
+        status
+    ) {
+
+        /*
+         * Find the student row.
+         */
+
+        const row =
+            button.closest(
+                ".student-attendance-row"
+            );
+
+
+        if (!row) {
+            return;
+        }
+
+
+        /*
+         * Remove selected state
+         * from both buttons.
+         */
+
+        const buttons =
+            row.querySelectorAll(
+                ".attendance-status-btn"
+            );
+
+
+        buttons.forEach(function(btn) {
+
+            btn.classList.remove(
+                "selected"
+            );
+
+        });
+
+
+        /*
+         * Select clicked button.
+         */
+
+        button.classList.add(
+            "selected"
+        );
+
+
+        /*
+         * Store selected status
+         * inside hidden input.
+         */
+
+        const hiddenInput =
+            document.getElementById(
+                "status_" + studentId
+            );
+
+
+        if (hiddenInput) {
+
+            hiddenInput.value =
+                status;
+
+        }
+
+
+        /*
+         * Update summary visually.
+         */
+
+        updateAttendanceSummary();
+
+    }
+
+
+    function updateAttendanceSummary() {
+
+        const hiddenInputs =
+            document.querySelectorAll(
+                'input[name^="status_"]'
+            );
+
+
+        let present = 0;
+        let absent = 0;
+
+
+        hiddenInputs.forEach(function(input) {
+
+            if (input.value === "Present") {
+
+                present++;
+
+            }
+
+
+            if (input.value === "Absent") {
+
+                absent++;
+
+            }
+
+        });
+
+
+        const total =
+            hiddenInputs.length;
+
+
+        const percentage =
+            total > 0
+                ? Math.round(
+                    (present / total) * 100
+                )
+                : 0;
+
+
+        const totalElement =
+            document.getElementById(
+                "totalStudents"
+            );
+
+
+        const presentElement =
+            document.getElementById(
+                "presentCount"
+            );
+
+
+        const absentElement =
+            document.getElementById(
+                "absentCount"
+            );
+
+
+        const percentageElement =
+            document.getElementById(
+                "attendancePercentage"
+            );
+
+
+        if (totalElement) {
+
+            totalElement.textContent =
+                total;
+
+        }
+
+
+        if (presentElement) {
+
+            presentElement.textContent =
+                present;
+
+        }
+
+
+        if (absentElement) {
+
+            absentElement.textContent =
+                absent;
+
+        }
+
+
+        if (percentageElement) {
+
+            percentageElement.textContent =
+                percentage + "%";
+
+        }
+
+    }
+
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function() {
+
+            updateAttendanceSummary();
+
+        }
+    );
+
+</script>
+
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+
+</body>
+
+</html>
